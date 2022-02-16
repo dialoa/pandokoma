@@ -1,0 +1,13 @@
+# Dialectica chapter pandoc configuration
+#   v 1.0
+
+standalone: true
+pdf-engine: lualatex
+template: ${.}/template
+metadata-files:
+- ${.}/design-meta-defaults.yaml
+- ${.}/design-meta.yaml
+
+# Design options that need to be
+# specified here
+top-level-division: section
