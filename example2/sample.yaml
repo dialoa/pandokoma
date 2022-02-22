@@ -1,0 +1,102 @@
+# BASIC SETTINGS
+# ======================================================================
+komaclass: scrbook
+documentclass: scrbook # to let Pandoc turn level 1 headings into chapters
+# NB: with titlepage=firstiscover chapter titles occupy their own page too.
+classoption:
+- a5paper
+- BCOR=0mm # no binding correction, we won't print
+- DIV=13 # KOMA's margin structure, smallest margins within reason
+- headinclude=yes # page head included in textblock
+- footinclude=no # page footer not included in textblock
+- twoside=semi # two-sided but with centered textblock
+- open=right # open chapters on the right
+- fontsize=9.5pt
+
+numbersections: true
+secnumberdepth: 3
+
+# GEOMETRY
+# ======================================================================
+
+# redesign the footnotes
+deffootnote:
+  markwidth: 0em
+  indent: 0em
+  parindent: 1em
+  definition: \thefootnotemark\enskip
+setfootnoterule:
+  thickness: .5pt
+  width: \textwidth
+
+# FONT MANAGEMENT
+# ======================================================================
+
+# font families
+mainfont: 'Libertinus Serif'
+sansfont: 'Libertinus Sans'
+monofont: 'Andale Mono'
+mathfont: 'Libertinus Math'
+CJKmainfont:
+
+# options to use with mainfont, sansfont, monofont, mathfont, CJKmainfont in
+# xelatex and lualatex. Allow for any choices available through fontspec, such
+# as the OpenType features Numbers=OldStyle,Numbers=Proportional. May be
+# specified as string or list.
+# default:
+mainfontoptions: 'Numbers=OldStyle'
+sansfontoptions:
+monofontoptions:
+mathfontoptions:
+CJKoptions:
+
+setkomafonts:
+- element: disposition
+  font: 'Libertinus Serif'
+  fontoptions: 'Numbers=OldStyle'
+  default: \bfseries
+- element: titlehead
+  default: \usekomafont{disposition}
+
+newkomafonts:
+- element: display
+  font: 'Libertinus Serif Display'
+  fontoptions: 'Numbers=OldStyle'
+
+addtokomafonts:
+- element: chapter
+  commands: \usekomafont{display}
+
+colorlinks: true
+linkcolor: 
+citecolor:
+urlcolor:
+toccolor: black
+
+definecolors:
+  name: dialecticablue
+  model: RGB
+  spec: [0,31,79]
+
+# TITLEPAGE(S) SETTINGS
+# ======================================================================
+
+# use title template B
+titletemplate-B: true
+
+# EXTRA PACKAGES
+# ======================================================================
+
+# user latex packages
+latex-packages:
+
+# to define and manage page styles (see "fancyhdr" too)
+# default:
+scrlayer-scrpage: true
+
+# COMMON PANDOC SETTINGS
+
+# uses document class settings for indentation (the default LaTeX template
+# otherwise removes indentation and adds space between paragraphs)
+# default:
+indent: true

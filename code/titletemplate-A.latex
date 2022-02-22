@@ -1,0 +1,275 @@
+$if(extratitle)$
+  \extratitle{%
+    $if(creators.creator.lastname)$
+      \begin{flushright}
+        \begin{large}
+          $for(creators)$
+            $if(creators.creator)$
+              $for(creators.creator)$
+                $if(creators.creator.firstname)$
+                  \textsc{$creators.creator.firstname$}
+                $endif$
+                $if(creators.creator.lastname)$
+                  \textsc{$creators.creator.lastname$}
+                $endif$
+              $endfor$
+            $endif$$sep$,
+          $endfor$
+        \end{large}
+      \end{flushright}
+      \vspace{0.05\textheight}
+    $elseif(author)$
+      \begin{flushright}
+        \begin{large}
+          $for(author)$
+            \textsc{$author$}$sep$,
+          $endfor$
+        \end{large}
+      \end{flushright}
+    $endif$
+  $if(title)$
+    \begin{flushright}
+      \begin{Huge}
+        $title$
+      \end{Huge}
+    \end{flushright}
+  $endif$
+  $if(subtitle)$
+    \begin{flushright}
+      \begin{LARGE}
+        $subtitle$
+      \end{LARGE}
+    \end{flushright}
+  $endif$
+  $if(titlepage.graphic)$
+    \vfill
+    \begin{figure}[ht]
+      \begin{center}
+        \includegraphics[width=\textwidth]{$titlepage.graphic$}
+      \end{center}
+    \end{figure}
+    \vfill
+  $endif$
+  $if(year)$
+    \vfill
+    \begin{flushright}
+      \begin{Large}
+        $year$
+      \end{Large}
+    \end{flushright}
+  $endif$
+  }
+$endif$
+%----------------------------------------------define the title page head field
+$if(titlehead)$
+  \titlehead{
+    $if(titlehead)$
+      $titlehead$
+    $endif$
+  }
+$endif$
+%-------------------------------------------------------define the subject line
+$if(subject)$
+  \subject{
+    $if(subject)$
+      $subject$
+    $endif$
+  }
+$endif$
+%---------------------------------------------------------define the title line
+$if(title)$
+  \title{
+    $if(title)$
+      $title$
+    $endif$
+  }
+$else$
+  \title{~}
+$endif$
+%------------------------------------------------------define the subtitle line
+$if(subtitle)$
+  \subtitle{
+    $if(subtitle)$
+      $subtitle$
+    $endif$
+  }
+$endif$
+%--------------------------------------------------------define the author line
+\author{
+  $if(creators)$
+    $for(creators)$
+      $if(creators.creator)$
+        $for(creators.creator)$
+          $if(creators.creator.firstname)$
+            \textsc{$creators.creator.firstname$}
+          $endif$
+          $if(creators.creator.lastname)$
+            \textsc{$creators.creator.lastname$}\\
+          $endif$
+          $if(creators.creator.contact)$
+            \href{mailto:$creators.creator.contact$}{$creators.creator.contact$}\\
+          $endif$
+        $endfor$
+      $endif$$sep$\and
+    $endfor$
+  $else$
+    $if(author)$
+      $for(author)$
+        \textsc{$author$}$sep$\and
+      $endfor$
+    $endif$
+  $endif$
+}
+%----------------------------------------------------------define the date line
+$if(date)$
+  \date{
+    $if(place)$
+      $place$,
+    $endif$
+    $if(date)$
+      $date$
+    $endif$
+  }
+$endif$
+%--------------------------------------------------------define publishers line
+$if(publishers)$
+  \publishers{
+    $if(publishers)$
+      $publishers$
+    $endif$
+  }
+$else$
+  $if(version)$
+    \publishers{
+      \begin{normalsize}
+        \href{$version.link$}{$version.timestamp$}\\
+        \href{$version.link$}{$version.hash$}\\
+      \end{normalsize}
+    }
+  $endif$
+$endif$
+%---------------------------------------------------define the upper title back
+\uppertitleback{
+  $if(title)$
+    $if(doi)$
+      $if(default.object_id.label)$
+        $default.object_id.label$\\
+      $endif$
+      $title$
+      $if(default.object_id.symbol)$
+        $default.object_id.symbol$
+      $endif$
+      \url{$doi$}\\
+      \\
+    $endif$
+  $endif$
+  $if(version.timestamp)$
+    $if(default.version.label)$
+      $default.version.label$\\
+    $endif$
+    $if(version.timestamp)$
+      \href{$version.link$}{$version.timestamp$}\\
+    $endif$
+    $if(version.hash)$
+      \href{$version.link$}{$version.hash$}\\
+      \\
+    $endif$
+  $endif$
+  $if(author)$
+    $if(default.person_id.label)$
+      $default.person_id.label$\\
+    $endif$
+  $endif$
+  $if(creators)$
+    $for(creators)$
+      $if(creators.creator)$
+        $for(creators.creator)$
+          $if(creators.creator.firstname)$
+            \textsc{$creators.creator.firstname$}
+          $endif$
+          $if(creators.creator.lastname)$
+            \textsc{$creators.creator.lastname$}
+          $endif$
+          $if(creators.creator.orcid)$
+            $if(default.person_id.symbol)$
+              $default.person_id.symbol$
+            $endif$
+            \url{$creators.creator.orcid$}
+          $endif$
+        $endfor$
+      $endif$$sep$~\\
+    $endfor$
+  $endif$
+  $if(license.short)$
+    $if(default.license)$
+      $if(default.license.label)$
+        $default.license.label$\\
+      $endif$
+      $if(default.license.symbol)$
+        $default.license.symbol$~
+      $endif$
+      $if(license.long)$
+        $license.long$
+      $endif$
+      $if(license.short)$
+        $license.short$\\
+      $endif$
+      $if(license.url)$
+        \url{$license.url$}\\
+      $endif$
+      $if(license.year)$
+        $license.year$
+      $endif$
+      $if(license.holder)$
+        \textsc{$license.holder$}
+      $endif$
+      $if(license.email)$
+        \href{mailto:$license.email$}{$license.email$}\\
+        \\
+      $endif$
+    $endif$
+  $endif$
+  $if(web)$
+    $default.web.label$\\
+    \url{$web$}\\
+    \\
+  $else$
+    $if(uppertitleback)$
+      $uppertitleback$
+    $endif$
+  $endif$
+}
+%---------------------------------------------------define the lower title back
+\lowertitleback{
+  $if(tools.description)$
+    $for(tools)$
+      $if(tools.description)$
+        $tools.description$
+      $endif$
+      $if(tools.stack)$
+        $for(tools.stack)$
+          $if(tools.stack.symbol)$
+            \scalerel*{$tools.stack.symbol$}{O}~
+            %\scalerel*{\includegraphics{$tools.stack.symbol$}}{O}
+          $endif$
+          $if(tools.stack.label)$
+            $tools.stack.label$~
+          $endif$
+          $if(tools.stack.url)$
+            \url{$tools.stack.url$}
+          $endif$
+        $endfor$
+      $endif$$sep$\\
+    $endfor$
+  $else$
+    $if(lowertitleback)$
+      $lowertitleback$
+    $endif$
+  $endif$
+}
+%-------------------------------------------------------------define dedication
+$if(dedication)$
+  \dedication{
+    $dedication$
+  }
+$endif$
