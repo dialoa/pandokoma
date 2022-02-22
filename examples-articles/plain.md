@@ -1,9 +1,12 @@
-```{=latex}
-\chapter{Preface}
-\addxcontentsline{toc.front}{chapter}{Preface}
-\addxcontentsline{toc.main}{chapter}{Preface}
-\addxcontentsline{toc.back}{chapter}{Preface}
-```
+---
+title: Sample document without KOMA class options
+author: Jane Doe
+date: Feb 22th, 2020
+abstract: This example checks that `pandokoma` works on a 
+    document that doesn't specify any LaTeX option. The default
+    class is `scrartcl` with KOMA's sans-serif headings. 
+bibliography: references.bib
+---
 
 Lorem markdownum manusque commota origine, in vidit et demittit nullos
 spectandique pedes manus iugulati in praedae, libidinis. Dixerat puer omnes,
@@ -71,17 +74,6 @@ Aenean rubor qui. Ululasse reddita renarrant vertice virga.
 Posse Thisbaeas cavis, et munus inquit, sacrum huic ligno pater animus nitet
 est, plures perveniunt oculos! Ipse putat iuvenum caecaeque admovet rorat
 Deucalioneas.
-
-\mainmatter
-
-```{=latex}
-\chapterauthor{Gaius Julius}
-\chaptertitle{Aliena populi orbes humo iterant}
-\makechaptertitle
-\addxcontentsline{toc.front}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.main}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.back}{chapter}{\chaptertocentry}
-```
 
 # Incursat et refert sata dilectus tectis tamen
 
@@ -269,15 +261,6 @@ Pia ad *rector atram*. Quis dicta **violentior** terraeque opus anhelitus sentit
 posset, illic saevis illis, longius pendentemque aquas Erysicthone? Regione ater
 placui, Elin alterius heros fungi domusque sceleri formae; [inpatiensque tempore
 nox](http://gradive.com/ter.aspx) Cephesidas eiectas quos amore.
-
-```{=latex}
-\chapterauthor{Marcus Tullius}
-\chaptertitle{Erat sol mutata infelix}
-\makechaptertitle
-\addxcontentsline{toc.front}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.main}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.back}{chapter}{\chaptertocentry}
-```
 
 Lorem [markdownum](http://conscialumen.com/venit): undas advolat esse? Videbar
 ante similes; legumque ferens. Fauces nate arboris; ne quae poposcerat habens

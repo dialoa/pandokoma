@@ -7,7 +7,7 @@ TITLE_TEMPLATES := $(patsubst code/%.latex,%,${TITLE_TEMPLATES_FILES})
 SEDMERGE := $(foreach NAME,$(TITLE_TEMPLATES),-e '/\$$$(NAME)()\$$/r code/$(NAME).latex' -e '/\$$$(NAME)()\$$/d')
 SEDCLEAN := $(foreach NAME,$(TITLE_TEMPLATES),-e '/\$$$(NAME)()\$$/d')
 ### We apply to test files
-TESTFILES := $(wildcard example*/sample.md)
+TESTFILES := $(wildcard example*/*.md)
 
 all: build test
 
