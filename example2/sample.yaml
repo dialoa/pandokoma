@@ -1,8 +1,6 @@
 # BASIC SETTINGS
 # ======================================================================
-komaclass: scrbook
-documentclass: scrbook # to let Pandoc turn level 1 headings into chapters
-# NB: with titlepage=firstiscover chapter titles occupy their own page too.
+documentclass: scrbook
 classoption:
 - a5paper
 - BCOR=0mm # no binding correction, we won't print

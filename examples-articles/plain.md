@@ -3,8 +3,8 @@ title: Sample document without KOMA class options
 author: Jane Doe
 date: Feb 22th, 2020
 abstract: This example checks that `pandokoma` works on a 
-    document that doesn't specify any LaTeX option. The default
-    class is `scrartcl` with KOMA's sans-serif headings. 
+    document that doesn't specify any LaTeX options except
+    the `scrartcl` document class. 
 bibliography: references.bib
 ---
 

@@ -35,8 +35,7 @@ $endif$
       $if(handout)$handout,$endif$%
       $if(aspectratio)$aspectratio=$aspectratio$,$endif$%
     $endif$%
-    $for(classoption)$$classoption$$sep$,$endfor$]{
-    $if(komaclass)$$komaclass$$else$scrartcl$endif$}
+    $for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 %-----------------------------------------------------------------BUGFIX
 \makeatletter
 \newif\ifonecol

@@ -1,1 +1,6 @@
-language: en
+# Pandokoma design for this document
+#   if the design is only used for a single source
+#   document in markdown, it could be included in
+#   that document's yaml metadata block.
+
+documentclass: scrartcl
