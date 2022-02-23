@@ -56,6 +56,13 @@ or `scrreprt` (report), so your metavariables should contain:
 documentclass: scrartcl
 ```
 
+Advanced font options will typically require using LuaLaTeX or XeLaTeX 
+as PDF generator. Use the `--pdf-engine` option, e.g:
+
+```bash
+pandoc -s source.md -o destination.pdf --template pandokoma.latex --pdf-engine lualatex --metadata-file mystylefile.yaml
+```
+
 __Repositorty overview__. This repository contains:
 
 1. [pandokoma.latex](pandokoma.latex) the main template.

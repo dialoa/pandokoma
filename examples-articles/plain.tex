@@ -1,20 +1,14 @@
 %--------------------------------- Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-  \PassOptionsToPackage{}{xcolor}
 %-------------------------------------------------------- Document class
 %----------------------------------- scrartcl unless otherwise specified
 \documentclass[%
     %
     %
     %
-  
-  
-  
-  
-  
-    paper=140mm:210mm,BCOR=0mm,DIV=15,headinclude=yes,footinclude=no,twoside=semi,open=right,titlepage=no,fontsize=9.5pt,footnotes=multiple]
-    {scrartcl}
+    %
+    ]{scrartcl}
 %-----------------------------------------------------------------BUGFIX
 \makeatletter
 \newif\ifonecol
@@ -23,36 +17,28 @@
 \makeatother
 
 %---------------------------------------------------------------GEOMETRY
+%------------------------------------------ uses raggedbottom by default
+\raggedbottom
+
+
 
 %-----------------------------------------------------redefine footnotes
-  \deffootnote[0em]{%
-  0em}{%
-  1em}{%
-  \thefootnotemark\enskip %
-  }
-  \setfootnoterule[.5pt]{%
-  \textwidth}
 
 
 %---------------------------------------------------------EXTRA PACKAGES
 %--------------------------------------------------------- user packages
-%-----------------------------------(several common pages are given also
+%---------------------------------------  (some common packages are also
 %------------------------------------provided as separate options below)
-            \usepackage{resources/latex/scrcoll}
-                \usepackage{pagecolor}
-                \usepackage{afterpage}
-                \usepackage{tabularx}
-                \usepackage{multirow}
-      
+
 %------------------------advanced font selection in XeLaTeX and LuaLaTeX
 %--------------------------enable system font access (needed by XeLaTex)
 %-----------for: \setmainfont{...}, \setsansfont{...}, \setmonofont{...} 
 %----------------------------and \setmathfont{...} see option "mainfont".
 
+
 %-----------------------------to manage text 'layers' within koma-script
 
 %--------------to define and manage page styles (see pkg "fancyhdr" too)
-  \usepackage{scrlayer-scrpage}
 
 %----------------------to control note columns parallel to the main text
 
@@ -122,66 +108,14 @@
   \usepackage{unicode-math}
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-  \setmainfont[Numbers=OldStyle]{STIX Two Text}
-  \setsansfont[]{Libertinus Sans}
-  \setmonofont[]{Andale Mono}
-  \setmathfont[]{STIX Two Math}
 \fi
 
 % --------------------------Support for zero-width non-joiner characters
 
 % --------------------------------------------------- KOMA font elements
-            \newkomafont{display}{%
-        \normalfont%
-          \setmainfont[%
-            Numbers=OldStyle]{%
-          Libertinus Serif Display}%
-        %
-      %
-      %
-      %
-      }
-                      \newkomafont{logo}{%
-        \normalfont%
-          \setmainfont{%
-          VenusSB-BoldExtended}%
-        %
-      %
-      %
-      %
-      }
-                      \newkomafont{frontispiecedispo}{%
-        \normalfont%
-          \setmainfont{%
-          Libertinus Serif}%
-        %
-      %
-      \small\bfseries%
-      %
-      }
-            
-            \setkomafont{disposition}{%
-        \normalfont%
-          \setmainfont[%
-            Numbers=OldStyle]{%
-          Libertinus Serif}%
-        %
-      \bfseries%
-      %
-      %
-      }
-                \setkomafont{titlehead}{%
-        %
-      \usekomafont{disposition}%
-      %
-      %
-      }
-      
-            \addtokomafont{chapter}{%
-        %
-      %
-      \usekomafont{display}}
-      
+
+
+
 
 %------------------------------------------------ beamer theme (removed)
 
@@ -193,33 +127,33 @@
 %------------------------------------------------ microtype if available
 %----------- for subliminal refinements towards typographical perfection
 \IfFileExists{microtype.sty}{%
-  \usepackage[]{microtype}
+  %
+    \usepackage[final]{microtype}
+  %
   \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
 
 %------------------------ paragraph separation: indent or vertical space
+  \IfFileExists{parskip.sty}{%
+  \usepackage{parskip}
+  }{% else
+  \setlength{\parindent}{0pt}
+  \setlength{\parskip}{6pt plus 2pt minus 1pt}
+  }
 
 % ---------------------------------------- support for verbatim in notes
 % ---------------------- `verbatim-in-notes` automatically set by Pandoc
 % -------------------------------- needs a second command after hyperref
 % -------------------------------------------------------- color support
 % ---------------------------- xcolor for driver-independent color names
-  \usepackage{xcolor}
 % -------------------------------------------------------- define colors
 % ------------------------ requires name, model and spec. type optional.
-            \definecolor[]{dialecticablue}{RGB}{%
-      0,31,79}
-    
-  %-------------------------------extensive support for hypertext in LaTeX
+%-------------------------------extensive support for hypertext in LaTeX
 \usepackage{hyperref}
 \hypersetup{
-  pdftitle={A document without KOMA class},
   pdfauthor={Jane Doe},
-  colorlinks=true,
-  linkcolor=Maroon,
-  citecolor=Blue,
-  urlcolor=Blue,
-breaklinks=true}
+      pdfborder={0 0 0},
+  breaklinks=true}
 %------------------------------------- verbatim in footnotes (see above)
 %------------ looks like this needs to come after hyperref, not sure why
 
@@ -278,7 +212,7 @@ breaklinks=true}
 %------------------------------------------ `links-as-notes` set by user
 
 %-------------------------------------------------------- strikeout text
-%------------------------------- `strikeout` automatically set by Pandoc
+%---------------------- `strikeout` variable automatically set by Pandoc
 
 %------------------------------------------------ prevent overfull lines
 \setlength{\emergencystretch}{3em}  
@@ -312,13 +246,6 @@ breaklinks=true}
 %---------------------------------- styling commands with default values
 
 %================================================== USER HEADER-INCLUDES
-\addtotoclist{toc.front}
-\addtotoclist{toc.main}
-\addtotoclist{toc.back}
- \DeclareTOCStyleEntry[%
-  beforeskip=.2em,
-  linefill=\dotfill,
-  ]{tocline}{chapter}
 
 
 %===================================================== LANGUAGES SUPPORT
@@ -352,116 +279,31 @@ breaklinks=true}
 %--------------------------------- printed here if it uses `\maketitle`,
 %------------------------------------- in the document's body otherwise.
 %        ---------------------------------------------- extra title page
-      \extratitle{%
-    \newpagecolor{dialecticablue}\afterpage{\restorepagecolor}
-\color{white}
-\vskip 2pc
-\begin{center}
-\usekomafont{logo}
-{\fontsize{48}{54}\selectfont dialectica}
-\vskip 10pt
-{\fontsize{12}{15}\selectfont\addfontfeature{LetterSpace=7.0} International Journal of Philosophy }
-\vskip 4pc
-\parbox{.75\textwidth}{\usekomafont{disposition}\Large\itshape%
-  \centering%
-  Special issue on \\ the Formalization of Arguments
-}
-\vskip 1pc
-\end{center}
-\vskip 3pc%
-{\usekomafont{logo}\Large Contents}
-\vskip .5em
-{% be sure to vskip before this element
-  \hypersetup{linkcolor=white}
-  \listoftoc*{toc.front}
-}
-
-\normalcolor %
-    }
   %        --------------------------------- frontispiece (opposite title)
-      \frontispiece{%
-    \pagestyle{empty}
-\begin{center}
-{\usekomafont{logo}\Large dialectica}
-\vskip \baselineskip
-\footnotesize\normalfont International Journal of Analytic Philosophy \\
-Offical Organ of the European Society of Analytic Philosophy
-\vskip .5\baselineskip
-Founded in 1947 by Gaston Bachelard, Paul Bernays and Ferdinand Gonseth\\
-\end{center}
-\vskip \baselineskip
-\footnotesize\normalfont
-{\usekomafont{frontispiecedispo} Editorial board}
-
-Jérôme Dokic, Institut Jean Nicod, Paris, France\\
-Pascal Engel, EHESS, Paris, France\\
-Manuel García-Carpintero, Universitat de Barcelona, Spain\\
-Diego Marconi, Università di Torino, Italy\\
-Carlos Moya, Universitat de Valéncia, Spain\\
-Martine Nida-Rümelin, Université de Fribourg, Switzerland\\ 
-François Recanati, Institut Jean Nicod, Paris, France\\
-Marco Santambrogio, Università degli Studi di Parma, Italy\\
-Peter Simons, Trinity College Dublin, Ireland\\
-Gianfranco Soldati, Université de Fribourg, Switzerland\\
-Marcel Weber, Université de Genève, Switzerland
-
-\vskip .5\baselineskip
-{\usekomafont{frontispiecedispo} Editors}
-
-Fabrice Correia, University of Geneva\\
-Philipp Blum, University of Lucerne (managing editor)
-
-\vskip .5\baselineskip
-{\usekomafont{frontispiecedispo} Review Editors}
-
-Stephan Leuenberger and Philipp Blum
-
-\vskip .5\baselineskip
-{\usekomafont{frontispiecedispo} Editiorial committee}
-
-Philipp Blum (né Keller), Claudio Calosi, Fabrice Correia, Catharine Diehl, Julien Dutant, Matthias Egg, Patrik Engisch, David Furrer, Andrea Giananti, Jörg Löschke, Arturs Logins, Giovanni Merlo, Robert Michels, Sebastian Muders, Paolo Natali, Donnchadh O’Conaill, François Pellet, Edgar Phillips, Steph Rennick, Maria Scarpati, Philipp Schwind, Mike Stuart, Fabrice Teroni, Daniel Vanello, Lisa Vogt, Jonas Waechter, Christian Weibel
-
-\vskip .5\baselineskip
-{\usekomafont{frontispiecedispo} Consulting Board}
-
-Johannes Brandl (Salzburg), João Branquinho (Lisboa), Elke Brendel (Bonn), Ingar Brinck (Lunds), Eros Corazza (Ikerbasque and Carleton), Josep Corbi (Valéncia), Michael Esfeld (Lausanne), Dagfinn Føllesdal (Stanford), Frank Jackson (Australian National University), Max Kistler (Paris I), Max Kölbel (Wien), Jan Lacki (Genève), Karel Lambert (Irvine), Paolo Leonardi (Bologna), Fraser Macbride (Manchester), Josep Macià (Barcelona), Genoveva Martí (Barcelona), Élisabeth Pacherie (Insitut Jean Nicod, Paris), David Piñeda (Girona), Wlodek Rabinowicz (Lunds), Barry Smith (Buffalo), Thomas Strahm (Bern), Christine Tappolet (Montréal), Neil Tennant (Ohio State), Mark Textor (King’s College London), Achille Varzi (Columbia University), Alberto Voltolini (Modena and Reggio Emilia), Timothy Williamson (Oxford) %
-    }
   %        -------------------------------------- title head (above title)
-      \titlehead{%
-    \usekomafont{logo}
-\begin{tabularx}{\textwidth}{@{}X@{}r@{}}
-\multirow[t]{2}{*}{\raisebox{-\baselineskip}{\Huge dialectica}} & vol 1\\
-              & issue 1\\
-\end{tabularx} %
-    }    
   %        ---------------------- subject (above title, subject koma font)
   %        ---------------------------------------------------- title line
-      \title{A document without KOMA class}
+      \title{~}
   %        ------------------------------------------------------ subtitle
   %        -------------------------------------------------------- author
       \author{Jane Doe}
   %        ------------------------------------------------ place and date
+    \date{%
+    %
+    Feb 22th, 2020 %
+  }
   %        ---------------------------------------------------- dedication
  %        ---------------------------------------------------- dedication
  
 
 %================================================== DOCUMENT STARTS HERE
 \begin{document}
-
 %-----------------------------------------------print title page(s) here
 %----------------------------------- use maketitle unless told otherwise
 %------------------------------ if not place any raw titlepage code here
-  
-  \noindent {\Large\usekomafont{logo} Contents}
-  \vskip .5em
-  {% be sure to vskip before this element
-    \hypersetup{linkcolor=black}
-    \listoftoc*{toc.main}
-  }
+
 
 %----------------------------------------------- frontmatter starts here
-
-
 
 
 
@@ -536,15 +378,6 @@ caeloque hoc Aenean rubor qui. Ululasse reddita renarrant vertice virga.
 Posse Thisbaeas cavis, et munus inquit, sacrum huic ligno pater animus
 nitet est, plures perveniunt oculos! Ipse putat iuvenum caecaeque
 admovet rorat Deucalioneas.
-
-\mainmatter
-
-\chapterauthor{Gaius Julius}
-\chaptertitle{Aliena populi orbes humo iterant}
-\makechaptertitle
-\addxcontentsline{toc.front}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.main}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.back}{chapter}{\chaptertocentry}
 
 \hypertarget{incursat-et-refert-sata-dilectus-tectis-tamen}{%
 \section{Incursat et refert sata dilectus tectis
@@ -800,13 +633,6 @@ aquas Erysicthone? Regione ater placui, Elin alterius heros fungi
 domusque sceleri formae; \href{http://gradive.com/ter.aspx}{inpatiensque
 tempore nox} Cephesidas eiectas quos amore.
 
-\chapterauthor{Marcus Tullius}
-\chaptertitle{Erat sol mutata infelix}
-\makechaptertitle
-\addxcontentsline{toc.front}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.main}{chapter}{\chaptertocentry}
-\addxcontentsline{toc.back}{chapter}{\chaptertocentry}
-
 Lorem \href{http://conscialumen.com/venit}{markdownum}: undas advolat
 esse? Videbar ante similes; legumque ferens. Fauces nate arboris; ne
 quae poposcerat habens latuit \href{http://petere.com/esse}{sororis}.
@@ -1055,48 +881,5 @@ Latreus recurvatis, digitos.
 %------------------------------------------------ backmatter starts here
 
 
-\cleardoublepage % ensures a recto page
-\pagestyle{empty}
-\normalfont\normalsize
-
-\begin{center}
-
-Published by Philosophie.ch
-\vskip 1em
-
-Verein philosophie.ch\\
-Federweg 22\\
-3008 Bern\\
-Switzerland
-\vskip 1em
-
-\url{https://philosophie.ch/} 
-\vskip 1em
-
-ISNN 0012-2017
-\vskip 1em
-
-ISBN 0012-2017
-\vskip 1em
-
-This work is licensed under a \href{https://creativecommons.org/licenses/by/4.0/}{Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License}.
-\vskip 1em
-
-dialectica is supported by the Swiss Academy of Humanities and Social Sciences. More information: \url{www.sagw.ch/de/philosophie}
-\vskip 1em
-
-Abstracting and Indexing Services\\[.5em]
-The journal is indexed by the Arts and Humanities Citation Index, Current Contents, Current Mathematical Publications, Dietrich’s Index Philosophicus, IBZ - Internationale Bibliographie der Geistes- und Sozialwissen- schaftlichen Zeitschriftenliteratur, Internationale Bibliographie der Rezensionen Geistes- und Sozialwissenschaftlicher Literatur, Linguistics and Language Behavior Abstracts, Mathematical Reviews, MathSciNet, Periodicals Contents Index, Philosopher’s Index, Repertoire Bibliographique de la Philosophie, Russian Academy of Sciences Bibliographies.
-\end{center}
-
-\clearpage
-\newpagecolor{dialecticablue}\afterpage{\restorepagecolor}
-\color{white}
-\noindent {\usekomafont{logo}\Large Contents}
-\vskip .5em
-{% be sure to vskip before this element
-  \hypersetup{linkcolor=white}
-  \listoftoc*{toc.back}
-}
 
 \end{document}

@@ -1,14 +1,8 @@
 ---
-title: Sample document with title template A
 author: Jane Doe
+date: Feb 22th, 2020
+bibliography: references.bib
 ---
-
-# Abstract
-
-This document uses the title page template
-    arabica by Martin Maga <https://github.com/periodicpoint/arabica>.
-
-# Preface
 
 Lorem markdownum manusque commota origine, in vidit et demittit nullos
 spectandique pedes manus iugulati in praedae, libidinis. Dixerat puer omnes,
@@ -77,13 +71,9 @@ Posse Thisbaeas cavis, et munus inquit, sacrum huic ligno pater animus nitet
 est, plures perveniunt oculos! Ipse putat iuvenum caecaeque admovet rorat
 Deucalioneas.
 
-\mainmatter
+# Incursat et refert sata dilectus tectis tamen
 
-# Aliena populi orbes humo iterant
-
-## Incursat et refert sata dilectus tectis tamen
-
-### Age Troiae bos similis
+## Age Troiae bos similis
 
 Lorem markdownum quamquam, ordo cum robora ille obvius, est saepe sequitur manu [@Chomsky1957;@Labov1972] .
 Vivit fraxineam petis, est ferar flumina Asopiades pallent [generi] repugnat
@@ -147,7 +137,7 @@ gbps = netPpga;
 multiprocessingCluster(daw + 3, 11, volume_access);
 ```
 
-### Tu verum flectimur
+## Tu verum flectimur
 
 Illa alvum __quaque__, cum nec cognita cavata; qui sumptis sedem proditione
 insignia puppis crines, is infelix cuspide. Perrhaebum Aegyptia _quinquennem
@@ -178,7 +168,7 @@ tria trahar. Est cava; vicit scintilla cuique, alta bis corporibus perpetuoque
 equos parcere patriaque, membra.
 
 
-### Ferumque ignaroque
+## Ferumque ignaroque
 
 Lorem markdownum anxia capellas laevisque intorquet. Verum iaculoque hic, non
 cineri: neutrumque cultros. Et bellum superbus iamque sit: accipiam quod. Caelo
@@ -191,7 +181,7 @@ dumque: figuras narremur amplexa, dolores: quod viae?
 - Paternos es vigil tumulati patent virgae
 - Ubi cum tibi es longe et ponit
 
-### Longae genitorque inter Hypsipyles vocato
+## Longae genitorque inter Hypsipyles vocato
 
 Licet sucosque: tandem: nervi, est tamen, retentos movet, causas nec? Dulcedine
 pugno. Dare Nasamoniaci interea hoc peteret facies bracchia! Et potest valebant
@@ -208,7 +198,7 @@ medullas sponda fit infelix dixerat *dentemque thalamos*. **Erat** vulnera!
 3. Ima se lympha passae
 4. Magna suscipimus ardet pectora mixtus trahuntur colentes
 
-### Vigor accipe similis herbarum montanis flamine necopinum
+## Vigor accipe similis herbarum montanis flamine necopinum
 
 Tenues posset Perseus memorare veniat verbis, urbis dedit viroque. Trahit
 *patriam modo locique* tuta terra velamina utraque. Et meo puniceum, pudorem
@@ -227,7 +217,7 @@ Exilio letale? Manu me onus Cadmi dixerat ut cruor et *opus paelice frondes* per
 potita desinit protecta. Qui *quae* dant secum praesensque arva: utque licet
 sustulerat dixit pactaque Piscique litore perfusam pabula: dat?
 
-### Inde et coierunt Aphidas e summa reverti
+## Inde et coierunt Aphidas e summa reverti
 
 Circe cyclopum tristis forma numeris Pan corpora tamen odio patre natum, flamma
 lapsu, mea arvis fortis? In sed quidem auras adesto funera genetrix iubebat
@@ -244,7 +234,7 @@ quis, requieverit ante tibi crudelior valentius ramos, **terribilesque Marte
 planissima** inania. Ut ceditis luridus: pontus ira antiquae fuit formatum
 increpor Cythno, et decepto Iovis. Aspicit sidere.
 
-### Maius polo Caicum fuit aspergine et fraude
+## Maius polo Caicum fuit aspergine et fraude
 
 Cum digitos credis terras Quirine; caespes est Ophias, Cererem, vidit incoquit,
 coniurata petebamus multa, fessos. Vulnere [calido](http://www.mein.net/);
@@ -268,16 +258,14 @@ posset, illic saevis illis, longius pendentemque aquas Erysicthone? Regione ater
 placui, Elin alterius heros fungi domusque sceleri formae; [inpatiensque tempore
 nox](http://gradive.com/ter.aspx) Cephesidas eiectas quos amore.
 
-# Erat sol mutata infelix
-
 Lorem [markdownum](http://conscialumen.com/venit): undas advolat esse? Videbar
 ante similes; legumque ferens. Fauces nate arboris; ne quae poposcerat habens
 latuit [sororis](http://petere.com/esse). Ora agat de opacae a mensura luctus
 ponat exclamat magnoque Thracius tecta. Paulumque Memnonis haec morer status.
 
-## Placet vultum genetrix tauri
+# Placet vultum genetrix tauri
 
-### Hoc semina mihi expulsa Lycetum
+## Hoc semina mihi expulsa Lycetum
 
 Lorem markdownum melior oculos mihi clausam vidi in deos. Fata debita, numquam
 __dicunt__: quam parvas abluere, sibi. _Audire est nisi_ et utque, inde radiis
@@ -289,7 +277,7 @@ licet](http://phoebe-ille.com/sisterehoc), moneri illis nostros, qvem.
 > resonant](http://crurumquegaleam.com/alius) monstrum Actaea caligine herbis
 > pectora per, ex pulvereamque rexit securus profecit tecto.
 
-### Rudibusque fletus patientem Cephisias ne Simois
+## Rudibusque fletus patientem Cephisias ne Simois
 
 Fretoque ora stirpis _Chaonis_ Eueninae torrentis ferebat quantum una petitos
 rigido et ecce! Colubris dolorque, odisse vestros. Recessit tota. Dextera
@@ -326,14 +314,14 @@ toro facinus, viros haec loca, inter.
 4. Spes membra cur oblectamina florem utque ponti
 5. Veteris pro vera harundine ille adhuc deiectam
 
-### Modo non
+## Modo non
 
 Agmen et moresque nocebant referunt. Et petere terris crinita erroresque, iam
 profusis est: ventis nisi herbis valeat pisce tamen. Eris satis pater. Natis
 artus, Neptunia suis mitior effugit __additur__ partim; deae vestra, Aeginam
 tuentur.
 
-### Cursus in Danais ingentibus
+## Cursus in Danais ingentibus
 
 Mihi unus per facies et venisset Ampycides pondera rotatis, obstat quae dederat
 nec dolendi miratus plangens. Pericula mortalia ferarum verba vehi stetit artus.
@@ -341,7 +329,7 @@ Icta memorant, acumine, cui bene Medusaei latratu procul quam, est non fortisque
 aquae vestigia Martem. Geminasque coeunt, harenae miles inmissos __tecti__
 flamma auditis voluitque.
 
-### In dicta feram
+## In dicta feram
 
 Debueram virgo delapsam __altore purior__ quod comitum elige et tergum, suasque
 hic dryadas inducta et narrat Tyndaris. Stygias venisse Theseus leviter se
@@ -376,9 +364,9 @@ antiqua labore, movet.
 [capillos]: http://www.supplex.io/
 [mare sonarent rogari]: http://potentia-nomine.io/
 
-## Desierat violenta
+# Desierat violenta
 
-### Dives ut videt distantia deo et quas
+## Dives ut videt distantia deo et quas
 
 Lorem markdownum officium guttae oculos hodierna, exstincta et ictu fert
 progenies erat possim thalamoque quid incingitur. Aerias nequeo corpus inhibere
@@ -402,7 +390,7 @@ Occupat volat. Dixisse causam ne hasta ablatus ecquid.
 > Seu antiquo haec ego rex eunti caelo, ante casus mea a Ceae et specie ulnis.
 > Adpellavere amomo.
 
-### In Iuno spectacula accepere
+## In Iuno spectacula accepere
 
 [Flamma non gentis](http://est.com/) nomen novit iussaque ignisque novercae
 siccis, faenilibus navis arbiter superas, nutrix. Iste adquirit eadem, acta
@@ -422,7 +410,7 @@ cornua.
 > A **iuventus ultro** una agant dependent Ilion. Est non fulserunt virgis
 > vastior aquis.
 
-### Torta igne Musae commenta quicumque spretis rerumque
+## Torta igne Musae commenta quicumque spretis rerumque
 
 Decepto cernentem in natus, aere, tecta radiis lacrimas, memores puro. Et tandem
 ademptas et reluxit ense arbore volui pia **quoque**, una tamen.

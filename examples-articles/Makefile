@@ -1,13 +1,23 @@
 all: tex pdf
 
-tex: plain.tex
+tex: plain.tex oldstyle.tex
 
-pdf: plain.pdf
+pdf: plain.pdf oldstyle.pdf
 
-plain.tex: plain.md plain.yaml ../code/template.latex
-	pandoc -s plain.md --metadata-file plain.yaml --template ../code/template.latex \
-		-o plain.tex
+plain.tex: source.md plain.yaml ../code/template.latex
+	pandoc -s --metadata-file plain.yaml --template ../code/template.latex \
+		$< -o $@ 
 
-plain.pdf: plain.md plain.yaml ../code/template.latex
-	pandoc -s plain.md --metadata-file plain.yaml --template ../code/template.latex \
-		-o plain.pdf
+plain.pdf: source.md plain.yaml ../code/template.latex
+	pandoc -s --metadata-file plain.yaml --template ../code/template.latex \
+		$< -o $@ 
+
+oldstyle.tex: source.md oldstyle.yaml ../code/template.latex
+	pandoc -s --metadata-file oldstyle.yaml --template ../code/template.latex \
+		$< -o $@ 
+
+oldstyle.pdf: source.md oldstyle.yaml ../code/template.latex
+	pandoc -s --metadata-file oldstyle.yaml --template ../code/template.latex \
+	--pdf-engine lualatex \
+		$< -o $@ 
+

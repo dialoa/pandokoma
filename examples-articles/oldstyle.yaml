@@ -1,6 +1,19 @@
+# Non-design variables
+title: Oldstyle article look
+abstract: This illustrates some page geometry,
+  font choices, footnote design options for an
+  old-style design (small caps headings, humanist
+  fonts). Requires Lualatex / XeLaTeX and the 
+  Libertinus and Andale Mono fonts.
+
+# Pandokoma design for this document
+#   if the design is only used for a single source
+#   document in markdown, it could be included in
+#   that document's yaml metadata block.
+
 # BASIC SETTINGS
 # ======================================================================
-documentclass: scrbook
+documentclass: scrartcl
 classoption:
 - a5paper
 - BCOR=0mm # no binding correction, we won't print
@@ -11,12 +24,22 @@ classoption:
 - open=right # open chapters on the right
 - fontsize=9.5pt
 
+# HEADINGS NUMBERING
+# ======================================================================
 numbersections: true
 secnumberdepth: 3
 
 # GEOMETRY
 # ======================================================================
+raggedbottom: true # superfluous, this is the default setting
 
+# uses document class settings for indentation (the default LaTeX template
+# otherwise removes indentation and adds space between paragraphs)
+# default:
+indent: true
+
+# FOOTNOTES
+# ======================================================================
 # redesign the footnotes
 deffootnote:
   markwidth: 0em
@@ -48,53 +71,43 @@ monofontoptions:
 mathfontoptions:
 CJKoptions:
 
+# `disposition` is KOMA's default style for headings
 setkomafonts:
 - element: disposition
   font: 'Libertinus Serif'
   fontoptions: 'Numbers=OldStyle'
-  default: \bfseries
+  default: \scshape
 - element: titlehead
   default: \usekomafont{disposition}
 
+# define a display font style
 newkomafonts:
 - element: display
   font: 'Libertinus Serif Display'
   fontoptions: 'Numbers=OldStyle'
 
 addtokomafonts:
-- element: chapter
+- element: title
   commands: \usekomafont{display}
 
-colorlinks: true
-linkcolor: 
-citecolor:
-urlcolor:
-toccolor: black
-
 definecolors:
-  name: dialecticablue
+- name: newblue
   model: RGB
-  spec: [0,31,79]
+  spec: [0,35,85]
+- name: newred
+  model: RGB
+  spec: [85,35,0]
 
-# TITLEPAGE(S) SETTINGS
-# ======================================================================
-
-# use title template B
-titletemplate-B: true
+colorlinks: true
+linkcolor: newblue
+citecolor: newblue
+urlcolor: newred
+toccolor: black
 
 # EXTRA PACKAGES
 # ======================================================================
-
-# user latex packages
-latex-packages:
 
 # to define and manage page styles (see "fancyhdr" too)
 # default:
 scrlayer-scrpage: true
 
-# COMMON PANDOC SETTINGS
-
-# uses document class settings for indentation (the default LaTeX template
-# otherwise removes indentation and adds space between paragraphs)
-# default:
-indent: true
