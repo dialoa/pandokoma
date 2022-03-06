@@ -6,10 +6,8 @@ TITLE_TEMPLATES_FILES := $(wildcard code/titletemplate-*.latex)
 TITLE_TEMPLATES := $(patsubst code/%.latex,%,${TITLE_TEMPLATES_FILES})
 SEDMERGE := $(foreach NAME,$(TITLE_TEMPLATES),-e '/\$$$(NAME)()\$$/r code/$(NAME).latex' -e '/\$$$(NAME)()\$$/d')
 SEDCLEAN := $(foreach NAME,$(TITLE_TEMPLATES),-e '/\$$$(NAME)()\$$/d')
-### We apply to test files
-TESTFILES := $(wildcard example*/*.md)
 
-all: build test
+all: build
 
 build: pandokoma.latex pandokoma-bare.latex
 
@@ -18,17 +16,3 @@ pandokoma.latex: code/template.latex ${TITLE_TEMPLATES_FILES}
 
 pandokoma-bare.latex: code/template.latex
 	@sed $(SEDCLEAN) $< > $@
-
-test: tex pdf
-
-tex: $(TESTFILES:md=tex) 
-
-pdf: $(TESTFILES:md=pdf) 
-
-$(TESTFILES:md=tex): $(TESTFILES) $(TESTFILES:md=yaml) pandokoma.latex
-	pandoc -s --template pandokoma.latex --metadata-file $(@:tex=yaml) \
-	$< --output $@
-
-$(TESTFILES:md=pdf): $(TESTFILES) $(TESTFILES:md=yaml)
-	pandoc -s --template pandokoma.latex --metadata-file $(@:tex=yaml) \
-	$< --output $@

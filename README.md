@@ -8,8 +8,9 @@ control for a large subset of the KOMA-script classes features directly
 from a source document's metadata, such as:
 
 - setting and defining KOMA font styles
-- typesetting page headers and footers
 - typesetting division headings 
+- typesetting page headers and footers
+- typesetting table of content entries
 - redefining footnote styles
 - defining custom colours
 - typesetting title pages - either via KOMA's commands 

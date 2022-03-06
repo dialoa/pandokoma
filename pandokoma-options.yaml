@@ -9,7 +9,7 @@
 # by Karl Voigt <https://github.com/novoid/LaTeX-KOMA-template>
 
 # GENERAL ADVICE
-# ======================================================================
+# ====================================================================
 # When specifying LaTeX options in a field, in most cases you can either
 # use strings, hyphenated lists, or bracketed lists:
 # ```yaml
@@ -45,7 +45,7 @@
 # Check Pandoc's LaTeX output to verify that your command appears correctly. 
 
 # BASIC SETTINGS
-# ======================================================================
+# ====================================================================
 
 # language, identifies the main language of the document, (polyglossia-lang)
 # default: 'en'
@@ -57,16 +57,11 @@ lang: 'en'
 # default: 'ltr'
 dir: 'ltr'
 
-# komaclass: LaTeX document class, e.g. article, report, book, memoir, 
+# documentclass: LaTeX document class, e.g. article, report, book, memoir, 
 # scrbook, scrreprt, scrartcl. 
 # You should normally choose one of the KOMA classes: scrbook, scrreprt
 # scrartcl.
-# NOTE: the template overrides Pandoc's "documentclass" variable and
-# sets "scrartcl" as the default class. (This is because there is no 
-# way for the template to tell whether `documentclass` has been set
-# by the user or by Pandoc, so the template sets the class to Koma's
-# `scrartcl` unless a komaclass is specified.)
-komaclass: 'scrbook'
+documentclass: 'scrbook'
 
 # option for document class, e.g. titlepage, oneside; may be repeated for
 # multiple options.
@@ -91,14 +86,36 @@ classoption:
   - 'onecolumn'
 #  - 'twocolumn'
 
+# komaoptions (alias komaoption)
+# list of option / value maps
+komaoptions:
+- option: headings
+  value: optiontoheadandtoc
+
+# longtablefix
+# A fix to allow tables within two columns. The fix is crude:
+# it turns tables into figure environments, which end up
+# floating. This will break some designs. 
+# default false
+longtablefix: false
+
+# has-frontmatter
+# set this to true for your LaTeX document to be divided in
+# \frontmatter, \mainmatter, \backmatter
+# default: false
+has-frontmatter: false
+
 # mainmatter
-# set this to true if your document includes a `\mainmatter`
-# command to separate a preface (etc.) from the main matter.
+# If not specified or false, the template will automatically
+# place the \mainmatter command after titles.
+# If set to true, you need to place the \mainmatter command yourself.
+# This is useful to separate a preface (and other frontmatter material
+# other than toc, list of figures and list of tables) from the main matter.
 # default: 
 mainmatter:
 
 # GEOMETRY
-# ======================================================================
+# ====================================================================
 
 # ragged bottom or flush bottom. LaTeX's default `flushbottom`
 # vertically stretches the text to the bottom of the page. Classical
@@ -111,7 +128,54 @@ mainmatter:
 raggedbottom: true
 flushbottom: false
 
-# define footnote. Choose markwidth (opt), indent, paragraph intend and the
+# newlength, setlength
+# define new LaTeX lengths, or set existing ones.
+# NB: the Pandoc template sets a few lengths of its own. You can over-
+# ride these settings using setlength here. 
+newlength:
+- length: gridbaseline
+  value: 12pt
+- length: chapterwithsubtitleskip 
+  value: 18pt plus 4pt minus 2pt
+- length: chapterwithoutsubtitleskip 
+  value: 6pt plus 1pt minus 1pt
+- length: chapterskip
+  value: 25pt plus 2pt minus 1pt
+- length: toctitleskip
+  value: 12pt plus 2pt minus 1pt
+setlength:
+- length: parindent
+  value: 2pt
+
+# geometry. Options for the geometry package. Use a list to set multiple
+# options.
+# Example:
+# geometry:
+# - "margin=1in"
+# - "centering"
+# default:
+geometry:
+
+# sets margins, if geometry is not used (otherwise geometry overrides these)
+# default:
+margin-left:
+margin-right:
+margin-top:
+margin-bottom:
+
+# adjusts line spacing using the setspace package, e.g. 1.25, 1.5
+# default:
+linestretch:
+
+# frenchspacing
+# use french spacing (normal interword spaces after dots).
+frenchspacing:
+
+
+# Footnotes
+# --------------------------------------------------------------------  
+
+# deffootnote. Choose markwidth (opt), indent, paragraph intend and the
 # definition of the footnotemark. See KOMA's manual.
 # Example (KOMA's default):
 # deffootnote:
@@ -127,21 +191,138 @@ deffootnote:
 #   width: \textwidth
 setfootnoterule:
 
-# option for geometry package, e.g. margin=1in; may be repeated for multiple
-# options
-# default:
-geometry:
+# Divisions: formatting headings, page headers, toc entries
+# --------------------------------------------------------------------  
 
-# sets margins, if geometry is not used (otherwise geometry overrides these)
-# default:
-margin-left:
-margin-right:
-margin-top:
-margin-bottom:
+# raggedpart, raggedchapter, raggedsection. LaTeX commands to set the 
+# alignement of sections, chapter and part headings---see KOMA manual.    
+raggedpart: \centering
+raggedchapter: \centering
+raggedsection: \raggedright
+# partformat, chapterformat, sectionformat, ..., subparagraph format.
+# LaTeX commands to format the headings counters.
+# Example:
+# partformat: \thepart\autodot
+partformat:
+chapterformat:
+sectionformat:
+subsectionformat:
+subsubsectionformat:
+paragraphformat:
+subparagraphformat:
+# declaresectioncommand, redeclaresectioncommand, declarenewsectioncommand,
+# providesectioncommand. 
+# Set a sectioning command (predefined like \section
+# or custom like \mydivision) and its attributes such as the heading's
+# font, indentation etc. but also the way the division is styled in 
+# the table of contents. Use a map to set one sectioning command, or
+# a list of maps to set several. In each map the `element` key is the 
+# sectioning command's name (e.g. `section`, `paragraph`, `mydivision`).
+# and the other fields are KOMA attributes. 
+# Available KOMA attributes: counterwithin, counterwithout, expandtopt,
+# level, style, tocstyle, tocafterpar, tocbeforeskip, tocbreakafternumber,
+# tocdynindent, tocentry, tocentryformat, tocentrynumberformat,
+# tocindent, toclevel, tocindentfollows, toclinefill, tocnumsep, 
+# tocnumwidth, toconendentry, toconendlastentry, toconstartfirstentry, 
+# toconstarthigherlevel, toconstartlowerlevel, toconstartsamelevel, 
+# tocpagenumberbox, tocpagenumberformat, tocpagenumberwidth, 
+# tocprepagenumber, tocraggedentrytext, tocraggedpagenumber, 
+# tocraggedright, tocraggedindent, afterindent, afterskip, beforeskip,
+# font, innerskip, pagestyle, prefixfont, indent, runin.
+#
+# Example:
+# redeclaresectioncommand:
+# - element: section
+#   font: \usekomafont{mydisplayfont}
+#   indent: 2em
+#   afterindent: true
+# - element: subsection
+#   font: \normalfont
+#   indent: 1em
+# providesectioncommand:
+# - element: chapter
+#   ...
+#   
+declaresectioncommand:
+redeclaresectioncommand:
+declarenewsectioncommand:
+providesectioncommand:
 
-# adjusts line spacing using the setspace package, e.g. 1.25, 1.5
+# Page styles
+# --------------------------------------------------------------------
+
+# to manage text 'layers' within koma-script
 # default:
-linestretch:
+scrlayer: false
+
+# scrlayer-scrpage. Load KOMA's package to define and manage page styles 
+# (see "fancyhdr" too). 
+# default: false
+# autooneside. Set scrlayer-scrpage's autooneside option (true or false).
+# default: false
+# NB: autooneside is automatically set to true if scrheadings commands 
+# are used (ohead, ihead, chead, etc., see below).
+scrlayer-scrpage: true
+autooneside: 
+
+# to control note columns parallel to the main text
+# to set side note column you need pkg "scrlayer-notecolumn"
+# you may want to set: \setkomafont{notecolumn.marginpar}{\footnotesize}
+# default:
+scrlayer-notecolumn:
+# default: '\footnotesize'
+notecolumnfontsize: '\footnotesize'
+
+# scrheadings
+# use KOMA's scrheadings to manage page headers and footers.
+# Automatically set to true if one of the scrheadings commands (chead,
+# etc.) is used.
+scrheadings:
+
+# scrheadings commands
+# ohead, chead, ihead, lehead, cehead, rehead, lohead, cohead, rohead
+# ofoot, cfoot, ifoot, lefoot, cefoot, refoot, lofoot, cofoot, rofoot
+# Set header and footer components.
+# c----: center header/footer on recto and verso pages
+# o----: outer header/footer, left of left pages and right on right pages
+# i----: inner header/footer, right of left pages and left on right pages
+# le----: left header/footer on even (verso, left) pages
+# ce----: center header/footer on even (verso, left) pages
+# re----: right header footer on even (verso, left) pages
+# lo----: left header/footer on odd (recto, right) pages
+# co----: center header/footer on odd (recto, right) pages
+# ro----: right header/footer on odd (recto, right) pages
+#
+# You may specify a string only. Example:
+# chead: \automark
+# ohead: \thepage
+# This will set the header/footer of pages in the "scrheadings" style, 
+# not plain pages (like an article title page or a chapter title page).
+# To set the header/footer of the plain title page, you should specify
+# a `plain` and `headings` keys instead. Example:
+# cfoot:
+#   plain: \relax
+#   headings: \automark
+# Cf KOMA's manual for more details. Starred versions not available yet.
+ohead:
+chead:
+ihead:
+lehead:
+cehead:
+rehead:
+lohead:
+cohead:
+rohead:
+ofoot:
+cfoot:
+ifoot:
+lefoot:
+cefoot:
+refoot:
+lofoot:
+cofoot:
+rofoot:
+
 
 # FONT MANAGEMENT
 # ======================================================================
@@ -368,28 +549,12 @@ links-as-notes:
 
 # to load extra latex packages
 # list with one package per entry. Just the package name,
-# or a map `name: <pkgname>` `options: '<pkgoptions>'`.
+# or a map `package: <pkgname>` `options: '<pkgoptions>'`.
 # Example:
 # - selnolig
-# - name: pgfmolbio
+# - package: pgfmolbio
 #   options: 'chromatogram'
 latex-packages:
-
-# to manage text 'layers' within koma-script
-# default:
-scrlayer:
-
-# to define and manage page styles (see "fancyhdr" too)
-# default:
-scrlayer-scrpage:
-
-# to control note columns parallel to the main text
-# to set side note column you need pkg "scrlayer-notecolumn"
-# you may want to set: \setkomafont{notecolumn.marginpar}{\footnotesize}
-# default:
-scrlayer-notecolumn:
-# default: '\footnotesize'
-notecolumnfontsize: '\footnotesize'
 
 # to mix onecolumn and twocolumn modes for example for wide equations.
 # usage: \begin{strip}...\end{strip}

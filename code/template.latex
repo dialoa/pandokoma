@@ -1,4 +1,4 @@
-$--$ FLEXIBLE KOMA-FRIENDLY LATEX TEMPLATE FOR PANDOC
+$--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
 $--$ Use $--$ to comment lines out; the second dollar sign is unnecessary
 $--$ but it keeps automatic LaTeX syntax highlighting in order.
@@ -9,13 +9,16 @@ $--$
 \PassOptionsToPackage{hyphens}{url}
 $if(colorlinks)$
   \PassOptionsToPackage{$if(xcoloroptions)$%
-  $for(xcoloroptions)$$it$$sep$,$endfor$$endif$}{xcolor}
+  $for(xcoloroptions)$$it$$sep$,$endfor$%
+  $else$dvipsnames,svgnames,x11names$endif$}{xcolor}
 $elseif(xcolor)$
   \PassOptionsToPackage{$if(xcoloroptions)$%
-  $for(xcoloroptions)$$it$$sep$,$endfor$$endif$}{xcolor}
+  $for(xcoloroptions)$$it$$sep$,$endfor$%
+  $else$dvipsnames,svgnames,x11names$endif$}{xcolor}
 $elseif(definecolors)$
   \PassOptionsToPackage{$if(xcoloroptions)$%
-  $for(xcoloroptions)$$it$$sep$,$endfor$$endif$}{xcolor}
+  $for(xcoloroptions)$$it$$sep$,$endfor$%
+  $else$dvipsnames,svgnames,x11names$endif$}{xcolor}
 $endif$
 $if(dir)$
 $if(latex-dir-rtl)$
@@ -26,7 +29,6 @@ $if(CJKmainfont)$
   \PassOptionsToPackage{space}{xeCJK}
 $endif$
 %-------------------------------------------------------- Document class
-%----------------------------------- scrartcl unless otherwise specified
 \documentclass[%
     $if(fontsize)$$fontsize$,$endif$%
     $if(lang)$$babel-lang$,$endif$%
@@ -36,26 +38,58 @@ $endif$
       $if(aspectratio)$aspectratio=$aspectratio$,$endif$%
     $endif$%
     $for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+$if(komaoptions)$
+  $for(komaoptions)$
+    $if(it.option)$$if(it.value)$
+      \KOMAoption{$it.option$}{$it.value$}     
+    $endif$$endif$
+  $endfor$
+$endif$
+$if(komaoption)$
+  $for(komaoption)$
+    $if(it.option)$$if(it.value)$
+      \KOMAoption{$it.option$}{$it.value$}     
+    $endif$$endif$
+  $endfor$
+$endif$
 %-----------------------------------------------------------------BUGFIX
+$if(longtablefix)$
 \makeatletter
 \newif\ifonecol
 \@ifclasswith{scrbook}{onecolumn}{\onecoltrue}{\onecolfalse}
 %\newcommand{\switchcol}{\ifonecol ONE\else TWO\fi}
 \makeatother
-
+$endif$
 %---------------------------------------------------------------GEOMETRY
 %------------------------------------------ uses raggedbottom by default
 $if(raggedbottom)$\raggedbottom
 $elseif(flushbottom)$\flushbottom
 $else$\raggedbottom
 $endif$
-
+%-------------------------------------------------- geometry and options
 $if(geometry)$
   $if(beamer)$
     \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
   $else$
   \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
   $endif$
+$endif$
+%-------------------------------------------------------- define lengths
+%------------------ NB: setlength is implemented later on to allow users
+%----------------------------  to override anything set by this template
+$if(newlength)$
+  $for(newlength)$
+    $if(it.length)$
+      $if(it.value)$
+        \newlength{\$it.length$}\setlength{\$it.length$}{$it.value$}
+      $else$
+        \newlength{\$it.length$}
+      $endif$
+    $elseif(it.value)$ $-- value alone makes no sense, do nothing $
+    $else$
+      \newlength{\$it$}
+    $endif$
+  $endfor$
 $endif$
 
 %-----------------------------------------------------redefine footnotes
@@ -71,6 +105,846 @@ $if(setfootnoterule)$
   $if(setfootnoterule.width)$$setfootnoterule.width$$else$.5\textwidth$endif$}
 $endif$
 
+%----------------------------------- redefine division headings commands
+$if(raggedpart)$
+  \renewcommand*{\raggedpart}{$raggedpart$}
+$endif$
+$if(raggedchapter)$
+  \renewcommand*{\raggedchapter}{$raggedchapter$}
+$endif$
+$if(raggedsection)$
+  \renewcommand*{\raggedsection}{$raggedsection$}
+$endif$
+$if(partformat)$
+  \renewcommand*{\partformat}{$partformat$}
+$endif$
+$if(chapterformat)$
+  \renewcommand*{\chapterformat}{$chapterformat$}
+$endif$
+$if(sectionformat)$
+  \renewcommand*{\sectionformat}{$sectionformat$}
+$endif$
+$if(subsectionformat)$
+  \renewcommand*{\subsectionformat}{$subsectionformat$}
+$endif$
+$if(subsubsectionformat)$
+  \renewcommand*{\subsubsectionformat}{$subsubsectionformat$}
+$endif$
+$if(paragraphformat)$
+  \renewcommand*{\paragraphformat}{$paragraphformat$}
+$endif$
+$if(subparagraphformat)$
+  \renewcommand*{\subparagraphformat}{$subparagraphformat$}
+$endif$
+$if(declaresectioncommand)$
+  $for(declaresectioncommand)$
+  \DeclareSectionCommand[%
+    $if(it.counterwithin)$counterwithin={$it.counterwithin$},$endif$%
+    $if(it.counterwithout)$counterwithout={$it.counterwithout$},$endif$%
+    $if(it.expandtopt)$expandtopt={$it.expandtopt$},$endif$%
+    $if(it.level)$level={$it.level$},$endif$%
+    $if(it.style)$style={$it.style$},$endif$%
+    $if(it.tocstyle)$tocstyle={$it.tocstyle$},$endif$%
+    $if(it.tocafterpar)$tocafterpar={$it.tocafterpar$},$endif$%
+    $if(it.tocbeforeskip)$tocbeforeskip={$it.tocbeforeskip$},$endif$%
+    $if(it.tocbreakafternumber)$tocbreakafternumber={$it.tocbreakafternumber$},$endif$%
+    $if(it.tocdynindent)$tocdynindent={$it.tocdynindent$},$endif$%
+    $if(it.tocdynnumwidth)$tocdynnumwidth={$it.tocdynnumwidth$},$endif$%
+    $if(it.tocentryformat)$tocentryformat={$it.tocentryformat$},$endif$%
+    $if(it.tocentrynumberformat)$tocentrynumberformat={$it.tocentrynumberformat$},$endif$%
+    $if(it.tocindent)$tocindent={$it.tocindent$},$endif$%
+    $if(it.toclevel)$toclevel={$it.toclevel$},$endif$%
+    $if(it.tocindentfollows)$tocindentfollows={$it.tocindentfollows$},$endif$%
+    $if(it.toclinefill)$toclinefill={$it.toclinefill$},$endif$%
+    $if(it.tocnumsep)$tocnumsep={$it.tocnumsep$},$endif$%
+    $if(it.tocnumwidth)$tocnumwidth={$it.tocnumwidth$},$endif$%
+    $if(it.toconendentry)$toconendentry={$it.toconendentry$},$endif$%
+    $if(it.toconendlastentry)$toconendlastentry={$it.toconendlastentry$},$endif$%
+    $if(it.toconstartentry)$toconstartentry={$it.toconstartentry$},$endif$%
+    $if(it.toconstartfirstentry)$toconstartfirstentry={$it.toconstartfirstentry$},$endif$%
+    $if(it.toconstarthigherlevel)$toconstarthigherlevel={$it.toconstarthigherlevel$},$endif$%
+    $if(it.toconstartlowerlevel)$toconstartlowerlevel={$it.toconstartlowerlevel$},$endif$%
+    $if(it.toconstartsamelevel)$toconstartsamelevel={$it.toconstartsamelevel$},$endif$%
+    $if(it.tocpagenumberbox)$tocpagenumberbox={$it.tocpagenumberbox$},$endif$%
+    $if(it.tocpagenumberformat)$tocpagenumberformat={$it.tocpagenumberformat$},$endif$%
+    $if(it.tocpagenumberwidth)$tocpagenumberwidth={$it.tocpagenumberwidth$},$endif$%
+    $if(it.tocprepagenumber)$tocprepagenumber={$it.tocprepagenumber$},$endif$%
+    $if(it.tocraggedentrytext)$tocraggedentrytext={$it.tocraggedentrytext$},$endif$%
+    $if(it.tocraggedpagenumber)$tocraggedpagenumber={$it.tocraggedpagenumber$},$endif$%
+    $if(it.tocraggedright)$tocraggedright={$it.tocraggedright$},$endif$%
+    $if(it.tocraggedindent)$tocraggedindent={$it.tocraggedindent$},$endif$%
+    $if(it.afterindent)$afterindent={$it.afterindent$},$endif$%
+    $if(it.afterskip)$afterskip={$it.afterskip$},$endif$%
+    $if(it.beforeskip)$beforeskip={$it.beforeskip$},$endif$%
+    $if(it.font)$font={$it.font$},$endif$%
+    $if(it.innerskip)$innerskip={$it.innerskip$},$endif$%
+    $if(it.pagestyle)$pagestyle={$it.pagestyle$},$endif$%
+    $if(it.prefixfont)$prefixfont={$it.prefixfont$},$endif$%
+    $if(it.indent)$indent={$it.indent$},$endif$%
+    $if(it.runin)$runin={$it.runin$},$endif$%
+  ]{$it.element$}
+  $endfor$
+$endif$
+$if(redeclaresectioncommand)$
+  $for(redeclaresectioncommand)$
+  \RedeclareSectionCommand[%
+    $if(it.counterwithin)$counterwithin={$it.counterwithin$},$endif$%
+    $if(it.counterwithout)$counterwithout={$it.counterwithout$},$endif$%
+    $if(it.expandtopt)$expandtopt={$it.expandtopt$},$endif$%
+    $if(it.level)$level={$it.level$},$endif$%
+    $if(it.style)$style={$it.style$},$endif$%
+    $if(it.tocstyle)$tocstyle={$it.tocstyle$},$endif$%
+    $if(it.tocafterpar)$tocafterpar={$it.tocafterpar$},$endif$%
+    $if(it.tocbeforeskip)$tocbeforeskip={$it.tocbeforeskip$},$endif$%
+    $if(it.tocbreakafternumber)$tocbreakafternumber={$it.tocbreakafternumber$},$endif$%
+    $if(it.tocdynindent)$tocdynindent={$it.tocdynindent$},$endif$%
+    $if(it.tocdynnumwidth)$tocdynnumwidth={$it.tocdynnumwidth$},$endif$%
+    $if(it.tocentryformat)$tocentryformat={$it.tocentryformat$},$endif$%
+    $if(it.tocentrynumberformat)$tocentrynumberformat={$it.tocentrynumberformat$},$endif$%
+    $if(it.tocindent)$tocindent={$it.tocindent$},$endif$%
+    $if(it.toclevel)$toclevel={$it.toclevel$},$endif$%
+    $if(it.tocindentfollows)$tocindentfollows={$it.tocindentfollows$},$endif$%
+    $if(it.toclinefill)$toclinefill={$it.toclinefill$},$endif$%
+    $if(it.tocnumsep)$tocnumsep={$it.tocnumsep$},$endif$%
+    $if(it.tocnumwidth)$tocnumwidth={$it.tocnumwidth$},$endif$%
+    $if(it.toconendentry)$toconendentry={$it.toconendentry$},$endif$%
+    $if(it.toconendlastentry)$toconendlastentry={$it.toconendlastentry$},$endif$%
+    $if(it.toconstartentry)$toconstartentry={$it.toconstartentry$},$endif$%
+    $if(it.toconstartfirstentry)$toconstartfirstentry={$it.toconstartfirstentry$},$endif$%
+    $if(it.toconstarthigherlevel)$toconstarthigherlevel={$it.toconstarthigherlevel$},$endif$%
+    $if(it.toconstartlowerlevel)$toconstartlowerlevel={$it.toconstartlowerlevel$},$endif$%
+    $if(it.toconstartsamelevel)$toconstartsamelevel={$it.toconstartsamelevel$},$endif$%
+    $if(it.tocpagenumberbox)$tocpagenumberbox={$it.tocpagenumberbox$},$endif$%
+    $if(it.tocpagenumberformat)$tocpagenumberformat={$it.tocpagenumberformat$},$endif$%
+    $if(it.tocpagenumberwidth)$tocpagenumberwidth={$it.tocpagenumberwidth$},$endif$%
+    $if(it.tocprepagenumber)$tocprepagenumber={$it.tocprepagenumber$},$endif$%
+    $if(it.tocraggedentrytext)$tocraggedentrytext={$it.tocraggedentrytext$},$endif$%
+    $if(it.tocraggedpagenumber)$tocraggedpagenumber={$it.tocraggedpagenumber$},$endif$%
+    $if(it.tocraggedright)$tocraggedright={$it.tocraggedright$},$endif$%
+    $if(it.tocraggedindent)$tocraggedindent={$it.tocraggedindent$},$endif$%
+    $if(it.afterindent)$afterindent={$it.afterindent$},$endif$%
+    $if(it.afterskip)$afterskip={$it.afterskip$},$endif$%
+    $if(it.beforeskip)$beforeskip={$it.beforeskip$},$endif$%
+    $if(it.font)$font={$it.font$},$endif$%
+    $if(it.innerskip)$innerskip={$it.innerskip$},$endif$%
+    $if(it.pagestyle)$pagestyle={$it.pagestyle$},$endif$%
+    $if(it.prefixfont)$prefixfont={$it.prefixfont$},$endif$%
+    $if(it.indent)$indent={$it.indent$},$endif$%
+    $if(it.runin)$runin={$it.runin$},$endif$%
+  ]{$it.element$}
+  $endfor$
+$endif$
+$if(declarenewsectioncommand)$
+  $for(declarenewsectioncommand)$
+  \DeclareNewSectionCommand[%
+    $if(it.counterwithin)$counterwithin={$it.counterwithin$},$endif$%
+    $if(it.counterwithout)$counterwithout={$it.counterwithout$},$endif$%
+    $if(it.expandtopt)$expandtopt={$it.expandtopt$},$endif$%
+    $if(it.level)$level={$it.level$},$endif$%
+    $if(it.style)$style={$it.style$},$endif$%
+    $if(it.tocstyle)$tocstyle={$it.tocstyle$},$endif$%
+    $if(it.tocafterpar)$tocafterpar={$it.tocafterpar$},$endif$%
+    $if(it.tocbeforeskip)$tocbeforeskip={$it.tocbeforeskip$},$endif$%
+    $if(it.tocbreakafternumber)$tocbreakafternumber={$it.tocbreakafternumber$},$endif$%
+    $if(it.tocdynindent)$tocdynindent={$it.tocdynindent$},$endif$%
+    $if(it.tocdynnumwidth)$tocdynnumwidth={$it.tocdynnumwidth$},$endif$%
+    $if(it.tocentryformat)$tocentryformat={$it.tocentryformat$},$endif$%
+    $if(it.tocentrynumberformat)$tocentrynumberformat={$it.tocentrynumberformat$},$endif$%
+    $if(it.tocindent)$tocindent={$it.tocindent$},$endif$%
+    $if(it.toclevel)$toclevel={$it.toclevel$},$endif$%
+    $if(it.tocindentfollows)$tocindentfollows={$it.tocindentfollows$},$endif$%
+    $if(it.toclinefill)$toclinefill={$it.toclinefill$},$endif$%
+    $if(it.tocnumsep)$tocnumsep={$it.tocnumsep$},$endif$%
+    $if(it.tocnumwidth)$tocnumwidth={$it.tocnumwidth$},$endif$%
+    $if(it.toconendentry)$toconendentry={$it.toconendentry$},$endif$%
+    $if(it.toconendlastentry)$toconendlastentry={$it.toconendlastentry$},$endif$%
+    $if(it.toconstartentry)$toconstartentry={$it.toconstartentry$},$endif$%
+    $if(it.toconstartfirstentry)$toconstartfirstentry={$it.toconstartfirstentry$},$endif$%
+    $if(it.toconstarthigherlevel)$toconstarthigherlevel={$it.toconstarthigherlevel$},$endif$%
+    $if(it.toconstartlowerlevel)$toconstartlowerlevel={$it.toconstartlowerlevel$},$endif$%
+    $if(it.toconstartsamelevel)$toconstartsamelevel={$it.toconstartsamelevel$},$endif$%
+    $if(it.tocpagenumberbox)$tocpagenumberbox={$it.tocpagenumberbox$},$endif$%
+    $if(it.tocpagenumberformat)$tocpagenumberformat={$it.tocpagenumberformat$},$endif$%
+    $if(it.tocpagenumberwidth)$tocpagenumberwidth={$it.tocpagenumberwidth$},$endif$%
+    $if(it.tocprepagenumber)$tocprepagenumber={$it.tocprepagenumber$},$endif$%
+    $if(it.tocraggedentrytext)$tocraggedentrytext={$it.tocraggedentrytext$},$endif$%
+    $if(it.tocraggedpagenumber)$tocraggedpagenumber={$it.tocraggedpagenumber$},$endif$%
+    $if(it.tocraggedright)$tocraggedright={$it.tocraggedright$},$endif$%
+    $if(it.tocraggedindent)$tocraggedindent={$it.tocraggedindent$},$endif$%
+    $if(it.afterindent)$afterindent={$it.afterindent$},$endif$%
+    $if(it.afterskip)$afterskip={$it.afterskip$},$endif$%
+    $if(it.beforeskip)$beforeskip={$it.beforeskip$},$endif$%
+    $if(it.font)$font={$it.font$},$endif$%
+    $if(it.innerskip)$innerskip={$it.innerskip$},$endif$%
+    $if(it.pagestyle)$pagestyle={$it.pagestyle$},$endif$%
+    $if(it.prefixfont)$prefixfont={$it.prefixfont$},$endif$%
+    $if(it.indent)$indent={$it.indent$},$endif$%
+    $if(it.runin)$runin={$it.runin$},$endif$%
+  ]{$it.element$}
+  $endfor$
+$endif$
+$if(providesectioncommand)$
+  $for(providesectioncommand)$
+  \ProvideSectionCommand[%
+    $if(it.counterwithin)$counterwithin={$it.counterwithin$},$endif$%
+    $if(it.counterwithout)$counterwithout={$it.counterwithout$},$endif$%
+    $if(it.expandtopt)$expandtopt={$it.expandtopt$},$endif$%
+    $if(it.level)$level={$it.level$},$endif$%
+    $if(it.style)$style={$it.style$},$endif$%
+    $if(it.tocstyle)$tocstyle={$it.tocstyle$},$endif$%
+    $if(it.tocafterpar)$tocafterpar={$it.tocafterpar$},$endif$%
+    $if(it.tocbeforeskip)$tocbeforeskip={$it.tocbeforeskip$},$endif$%
+    $if(it.tocbreakafternumber)$tocbreakafternumber={$it.tocbreakafternumber$},$endif$%
+    $if(it.tocdynindent)$tocdynindent={$it.tocdynindent$},$endif$%
+    $if(it.tocdynnumwidth)$tocdynnumwidth={$it.tocdynnumwidth$},$endif$%
+    $if(it.tocentryformat)$tocentryformat={$it.tocentryformat$},$endif$%
+    $if(it.tocentrynumberformat)$tocentrynumberformat={$it.tocentrynumberformat$},$endif$%
+    $if(it.tocindent)$tocindent={$it.tocindent$},$endif$%
+    $if(it.toclevel)$toclevel={$it.toclevel$},$endif$%
+    $if(it.tocindentfollows)$tocindentfollows={$it.tocindentfollows$},$endif$%
+    $if(it.toclinefill)$toclinefill={$it.toclinefill$},$endif$%
+    $if(it.tocnumsep)$tocnumsep={$it.tocnumsep$},$endif$%
+    $if(it.tocnumwidth)$tocnumwidth={$it.tocnumwidth$},$endif$%
+    $if(it.toconendentry)$toconendentry={$it.toconendentry$},$endif$%
+    $if(it.toconendlastentry)$toconendlastentry={$it.toconendlastentry$},$endif$%
+    $if(it.toconstartentry)$toconstartentry={$it.toconstartentry$},$endif$%
+    $if(it.toconstartfirstentry)$toconstartfirstentry={$it.toconstartfirstentry$},$endif$%
+    $if(it.toconstarthigherlevel)$toconstarthigherlevel={$it.toconstarthigherlevel$},$endif$%
+    $if(it.toconstartlowerlevel)$toconstartlowerlevel={$it.toconstartlowerlevel$},$endif$%
+    $if(it.toconstartsamelevel)$toconstartsamelevel={$it.toconstartsamelevel$},$endif$%
+    $if(it.tocpagenumberbox)$tocpagenumberbox={$it.tocpagenumberbox$},$endif$%
+    $if(it.tocpagenumberformat)$tocpagenumberformat={$it.tocpagenumberformat$},$endif$%
+    $if(it.tocpagenumberwidth)$tocpagenumberwidth={$it.tocpagenumberwidth$},$endif$%
+    $if(it.tocprepagenumber)$tocprepagenumber={$it.tocprepagenumber$},$endif$%
+    $if(it.tocraggedentrytext)$tocraggedentrytext={$it.tocraggedentrytext$},$endif$%
+    $if(it.tocraggedpagenumber)$tocraggedpagenumber={$it.tocraggedpagenumber$},$endif$%
+    $if(it.tocraggedright)$tocraggedright={$it.tocraggedright$},$endif$%
+    $if(it.tocraggedindent)$tocraggedindent={$it.tocraggedindent$},$endif$%
+    $if(it.afterindent)$afterindent={$it.afterindent$},$endif$%
+    $if(it.afterskip)$afterskip={$it.afterskip$},$endif$%
+    $if(it.beforeskip)$beforeskip={$it.beforeskip$},$endif$%
+    $if(it.font)$font={$it.font$},$endif$%
+    $if(it.innerskip)$innerskip={$it.innerskip$},$endif$%
+    $if(it.pagestyle)$pagestyle={$it.pagestyle$},$endif$%
+    $if(it.prefixfont)$prefixfont={$it.prefixfont$},$endif$%
+    $if(it.indent)$indent={$it.indent$},$endif$%
+    $if(it.runin)$runin={$it.runin$},$endif$%
+  ]{$it.element$}
+  $endfor$
+$endif$
+
+%--------------------------------------------------------- PAGE SETTINGS
+%-----------------------------to manage text 'layers' within koma-script
+$if(scrlayer)$
+  \usepackage{scrlayer}
+$endif$
+
+%--------------to define and manage page styles (see pkg "fancyhdr" too)
+%---------------------------- also loaded if scr-page settings are used.
+$if(scrlayer-scrpage)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(scrheadings)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(ohead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(chead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(ihead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(lehead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(cehead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(rehead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(lohead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(cohead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(rohead)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(ofoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(cfoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(ifoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(lefoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(cefoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(refoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(lofoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(cofoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(rofoot)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(automark)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(automark-star)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(autooneside)$
+  \usepackage[autooneside=true]{scrlayer-scrpage}
+$elseif(partmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(chaptermarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(sectionmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(subsectionmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(subsubsectionmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(paragraphmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(subparagraphmarkformat)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(manualmark)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$elseif(setmark)$
+  $if(autooneside)$
+    \usepackage[autooneside=true]{scrlayer-scrpage}
+  $else$
+    \usepackage{scrlayer-scrpage}
+  $endif$
+$endif$
+
+%------------------------------ scrheadings page style header and footer
+$if(scrheadings)$
+  \pagestyle{scrheadings}
+$elseif(ohead)$
+  \pagestyle{scrheadings}
+$elseif(chead)$
+  \pagestyle{scrheadings}
+$elseif(ihead)$
+  \pagestyle{scrheadings}
+$elseif(lehead)$
+  \pagestyle{scrheadings}
+$elseif(cehead)$
+  \pagestyle{scrheadings}
+$elseif(rehead)$
+  \pagestyle{scrheadings}
+$elseif(lohead)$
+  \pagestyle{scrheadings}
+$elseif(cohead)$
+  \pagestyle{scrheadings}
+$elseif(rohead)$
+  \pagestyle{scrheadings}
+$elseif(ofoot)$
+  \pagestyle{scrheadings}
+$elseif(cfoot)$
+  \pagestyle{scrheadings}
+$elseif(ifoot)$
+  \pagestyle{scrheadings}
+$elseif(lefoot)$
+  \pagestyle{scrheadings}
+$elseif(cefoot)$
+  \pagestyle{scrheadings}
+$elseif(refoot)$
+  \pagestyle{scrheadings}
+$elseif(lofoot)$
+  \pagestyle{scrheadings}
+$elseif(cofoot)$
+  \pagestyle{scrheadings}
+$elseif(rofoot)$
+  \pagestyle{scrheadings}
+$endif$
+$if(ohead)$
+  $if(ohead.headings)$
+    $if(ohead.plain)$
+      \ohead[$ohead.plain$]{$ohead.headings$}
+    $else$
+      \ohead{$ohead.headings$}
+    $endif$
+  $elseif(ohead.plain)$
+    \ohead[$ohead.plain$]{OHEAD HEADINGS UNDEFINED}
+  $else$
+    \ohead{$ohead$}
+  $endif$
+$endif$
+$if(chead)$
+  $if(chead.headings)$
+    $if(chead.plain)$
+      \chead[$chead.plain$]{$chead.headings$}
+    $else$
+      \chead{$chead.headings$}
+    $endif$
+  $elseif(chead.plain)$
+    \chead[$chead.plain$]{CHEAD HEADINGS UNDEFINED}
+  $else$
+    \chead{$chead$}
+  $endif$
+$endif$
+$if(ihead)$
+  $if(ihead.headings)$
+    $if(ihead.plain)$
+      \ihead[$ihead.plain$]{$ihead.headings$}
+    $else$
+      \ihead{$ihead.headings$}
+    $endif$
+  $elseif(ihead.plain)$
+    \ihead[$ihead.plain$]{IHEAD HEADINGS UNDEFINED}
+  $else$
+    \ihead{$ihead$}
+  $endif$
+$endif$
+$if(lehead)$
+  $if(lehead.headings)$
+    $if(lehead.plain)$
+      \lehead[$lehead.plain$]{$lehead.headings$}
+    $else$
+      \lehead{$lehead.headings$}
+    $endif$
+  $elseif(lehead.plain)$
+    \lehead[$lehead.plain$]{LEHEAD HEADINGS UNDEFINED}
+  $else$
+    \lehead{$lehead$}
+  $endif$
+$endif$
+$if(cehead)$
+  $if(cehead.headings)$
+    $if(cehead.plain)$
+      \cehead[$cehead.plain$]{$cehead.headings$}
+    $else$
+      \cehead{$cehead.headings$}
+    $endif$
+  $elseif(cehead.plain)$
+    \cehead[$cehead.plain$]{CEHEAD HEADINGS UNDEFINED}
+  $else$
+    \cehead{$cehead$}
+  $endif$
+$endif$
+$if(rehead)$
+  $if(rehead.headings)$
+    $if(rehead.plain)$
+      \rehead[$rehead.plain$]{$rehead.headings$}
+    $else$
+      \rehead{$rehead.headings$}
+    $endif$
+  $elseif(rehead.plain)$
+    \rehead[$rehead.plain$]{REHEAD HEADINGS UNDEFINED}
+  $else$
+    \rehead{$rehead$}
+  $endif$
+$endif$
+$if(lohead)$
+  $if(lohead.headings)$
+    $if(lohead.plain)$
+      \lohead[$lohead.plain$]{$lohead.headings$}
+    $else$
+      \lohead{$lohead.headings$}
+    $endif$
+  $elseif(lohead.plain)$
+    \lohead[$lohead.plain$]{LOHEAD HEADINGS UNDEFINED}
+  $else$
+    \lohead{$lohead$}
+  $endif$
+$endif$
+$if(cohead)$
+  $if(cohead.headings)$
+    $if(cohead.plain)$
+      \cohead[$cohead.plain$]{$cohead.headings$}
+    $else$
+      \cohead{$cohead.headings$}
+    $endif$
+  $elseif(cohead.plain)$
+    \cohead[$cohead.plain$]{COHEAD HEADINGS UNDEFINED}
+  $else$
+    \cohead{$cohead$}
+  $endif$
+$endif$
+$if(rohead)$
+  $if(rohead.headings)$
+    $if(rohead.plain)$
+      \rohead[$rohead.plain$]{$rohead.headings$}
+    $else$
+      \rohead{$rohead.headings$}
+    $endif$
+  $elseif(rohead.plain)$
+    \rohead[$rohead.plain$]{ROHEAD HEADINGS UNDEFINED}
+  $else$
+    \rohead{$rohead$}
+  $endif$
+$endif$
+$if(ofoot)$
+  $if(ofoot.headings)$
+    $if(ofoot.plain)$
+      \ofoot[$ofoot.plain$]{$ofoot.headings$}
+    $else$
+      \ofoot{$ofoot.headings$}
+    $endif$
+  $elseif(ofoot.plain)$
+    \ofoot[$ofoot.plain$]{OFOOT HEADINGS UNDEFINED}
+  $else$
+    \ofoot{$ofoot$}
+  $endif$
+$endif$
+$if(cfoot)$
+  $if(cfoot.headings)$
+    $if(cfoot.plain)$
+      \cfoot[$cfoot.plain$]{$cfoot.headings$}
+    $else$
+      \cfoot{$cfoot.headings$}
+    $endif$
+  $elseif(cfoot.plain)$
+    \cfoot[$cfoot.plain$]{CFOOT HEADINGS UNDEFINED}
+  $else$
+    \cfoot{$cfoot$}
+  $endif$
+$endif$
+$if(ifoot)$
+  $if(ifoot.headings)$
+    $if(ifoot.plain)$
+      \ifoot[$ifoot.plain$]{$ifoot.headings$}
+    $else$
+      \ifoot{$ifoot.headings$}
+    $endif$
+  $elseif(ifoot.plain)$
+    \ifoot[$ifoot.plain$]{IFOOT HEADINGS UNDEFINED}
+  $else$
+    \ifoot{$ifoot$}
+  $endif$
+$endif$
+$if(lefoot)$
+  $if(lefoot.headings)$
+    $if(lefoot.plain)$
+      \lefoot[$lefoot.plain$]{$lefoot.headings$}
+    $else$
+      \lefoot{$lefoot.headings$}
+    $endif$
+  $elseif(lefoot.plain)$
+    \lefoot[$lefoot.plain$]{LEFOOT HEADINGS UNDEFINED}
+  $else$
+    \lefoot{$lefoot$}
+  $endif$
+$endif$
+$if(cefoot)$
+  $if(cefoot.headings)$
+    $if(cefoot.plain)$
+      \cefoot[$cefoot.plain$]{$cefoot.headings$}
+    $else$
+      \cefoot{$cefoot.headings$}
+    $endif$
+  $elseif(cefoot.plain)$
+    \cefoot[$cefoot.plain$]{CEFOOT HEADINGS UNDEFINED}
+  $else$
+    \cefoot{$cefoot$}
+  $endif$
+$endif$
+$if(refoot)$
+  $if(refoot.headings)$
+    $if(refoot.plain)$
+      \refoot[$refoot.plain$]{$refoot.headings$}
+    $else$
+      \refoot{$refoot.headings$}
+    $endif$
+  $elseif(refoot.plain)$
+    \refoot[$refoot.plain$]{REFOOT HEADINGS UNDEFINED}
+  $else$
+    \refoot{$refoot$}
+  $endif$
+$endif$
+$if(lofoot)$
+  $if(lofoot.headings)$
+    $if(lofoot.plain)$
+      \lofoot[$lofoot.plain$]{$lofoot.headings$}
+    $else$
+      \lofoot{$lofoot.headings$}
+    $endif$
+  $elseif(lofoot.plain)$
+    \lofoot[$lofoot.plain$]{LOFOOT HEADINGS UNDEFINED}
+  $else$
+    \lofoot{$lofoot$}
+  $endif$
+$endif$
+$if(cofoot)$
+  $if(cofoot.headings)$
+    $if(cofoot.plain)$
+      \cofoot[$cofoot.plain$]{$cofoot.headings$}
+    $else$
+      \cofoot{$cofoot.headings$}
+    $endif$
+  $elseif(cofoot.plain)$
+    \cofoot[$cofoot.plain$]{COFOOT HEADINGS UNDEFINED}
+  $else$
+    \cofoot{$cofoot$}
+  $endif$
+$endif$
+$if(rofoot)$
+  $if(rofoot.headings)$
+    $if(rofoot.plain)$
+      \rofoot[$rofoot.plain$]{$rofoot.headings$}
+    $else$
+      \rofoot{$rofoot.headings$}
+    $endif$
+  $elseif(rofoot.plain)$
+    \rofoot[$rofoot.plain$]{ROFOOT HEADINGS UNDEFINED}
+  $else$
+    \rofoot{$rofoot$}
+  $endif$
+$endif$
+
+%------------------------ page marks: automark, automark* and manualmark
+%---------------- automark: specify one alone, or right/recto left/verso
+$if(automark)$
+  $if(automark.right)$
+    $if(automark.left)$
+      \automark[$automark.right$]{$automark.left$}
+    $elseif(automark.verso)$
+      \automark[$automark.right$]{$automark.verso$}
+    $else$
+      \automark[$automark.right$]{$automark.right$}    
+    $endif$
+  $elseif(automark.recto)$
+    $if(automark.left)$
+      \automark[$automark.recto$]{$automark.left$}
+    $elseif(automark.verso)$
+      \automark[$automark.recto$]{$automark.verso$}
+    $else$
+      \automark[$automark.recto$]{$automark.recto$}    
+    $endif$
+  $elseif(automark.left)$
+    $if(automark.right)$
+      \automark[$automark.right$]{$automark.left$}
+    $elseif(automark.recto)$
+      \automark[$automark.recto$]{$automark.left$}
+    $else$
+      \automark[$automark.left$]{$automark.left$}    
+    $endif$
+  $elseif(automark.verso)$
+    $if(automark.right)$
+      \automark[$automark.right$]{$automark.verso$}
+    $elseif(automark.recto)$
+      \automark[$automark.recto$]{$automark.verso$}
+    $else$
+      \automark[$automark.verso$]{$automark.verso$}    
+    $endif$
+  $else$
+    \automark[$automark$]{$automark$}
+  $endif$
+$endif$
+$if(automark-star)$
+  $if(automark-star.right)$
+    $if(automark-star.left)$
+      \automark*[$automark-star.right$]{$automark-star.left$}
+    $elseif(automark-star.verso)$
+      \automark*[$automark-star.right$]{$automark-star.verso$}
+    $else$
+      \automark*[$automark-star.right$]{}    
+    $endif$
+  $elseif(automark-star.recto)$
+    $if(automark-star.left)$
+      \automark*[$automark-star.recto$]{$automark-star.left$}
+    $elseif(automark-star.verso)$
+      \automark*[$automark-star.recto$]{$automark-star.verso$}
+    $else$
+      \automark*[$automark-star.recto$]{}    
+    $endif$
+  $elseif(automark-star.left)$
+    $if(automark-star.right)$
+      \automark*[$automark-star.right$]{$automark-star.left$}
+    $elseif(automark-star.recto)$
+      \automark*[$automark-star.recto$]{$automark-star.left$}
+    $else$
+      \automark*{$automark-star.left$}    
+    $endif$
+  $elseif(automark-star.verso)$
+    $if(automark-star.right)$
+      \automark*[$automark-star.right$]{$automark-star.verso$}
+    $elseif(automark-star.recto)$
+      \automark*[$automark-star.recto$]{$automark-star.verso$}
+    $else$
+      \automark*{$automark-star.verso$}    
+    $endif$
+  $else$
+    \automark*[$automark-star$]{$automark-star$}
+  $endif$
+$endif$
+%------------------------------------------------- format division marks
+$if(partmarkformat)$
+  \renewcommand*{\partmarkformat}{$partmarkformat$}
+$endif$
+$if(chaptermarkformat)$
+  \renewcommand*{\chaptermarkformat}{$chaptermarkformat$}
+$endif$
+$if(sectionmarkformat)$
+  \renewcommand*{\sectionmarkformat}{$sectionmarkformat$}
+$endif$
+$if(subsectionmarkformat)$
+  \renewcommand*{\subsectionmarkformat}{$subsectionmarkformat$}
+$endif$
+$if(subsubsectionmarkformat)$
+  \renewcommand*{\subsubsectionmarkformat}{$subsubsectionmarkformat$}
+$endif$
+$if(paragraphmarkformat)$
+  \renewcommand*{\paragraphmarkformat}{$paragraphmarkformat$}
+$endif$
+$if(subparagraphmarkformat)$
+  \renewcommand*{\subparagraphmarkformat}{$subparagraphmarkformat$}
+$endif$
+%---------------------------------------------------------- manual marks
+$if(manualmark)$
+  \manualmark
+$elseif(setmark)$
+  \manualmark
+$endif$
+$if(setmark)$
+  $if(setmark.right)$
+    $if(setmark.left)$
+      \markboth{$setmark.left$}{$setmark.right$}
+    $elseif(setmark.verso)$
+      \markboth{$setmark.verso$}{$setmark.right$}
+    $else$
+      \markright{$setmark.right$}
+    $endif$
+  $elseif(setmark.recto)$
+    $if(setmark.left)$
+      \markboth{$setmark.left$}{$setmark.recto$}
+    $elseif(setmark.verso)$
+      \markboth{$setmark.verso$}{$setmark.recto$}
+    $else$
+      \markright{$setmark.recto$}
+    $endif$
+  $elseif(setmark.left)$
+      \markleft{$setmark.left$}
+  $elseif(setmark.verso)$
+      \markleft{$setmark.verso$}
+  $else$
+      \markdouble{$setmark$}
+  $endif$
+$endif$
+
+%----------------------to control note columns parallel to the main text
+$if(scrlayer-notecolumn)$
+  \usepackage{scrlayer-notecolumn}
+  $if(notecolumnfontsize)$
+    %-------------set side note column (needs pkg "scrlayer-notecolumn")
+    \setkomafont{notecolumn.marginpar}{$notecolumnfontsize$}
+  $endif$
+$endif$
+
 
 %---------------------------------------------------------EXTRA PACKAGES
 %--------------------------------------------------------- user packages
@@ -78,10 +952,10 @@ $endif$
 %------------------------------------provided as separate options below)
 $if(latex-packages)$
   $for(latex-packages)$
-    $if(it.name)$
+    $if(it.package)$
       \usepackage[$if(it.options)$%
         $for(it.options)$$it$$sep$,$endfor$%
-      $endif$]{$it.name$}
+      $endif$]{$it.package$}
     $else$
       \usepackage{$it$}
     $endif$
@@ -106,26 +980,6 @@ $elseif(CJKmainfont)$
   \usepackage{fontspec}
 $endif$
 
-
-%-----------------------------to manage text 'layers' within koma-script
-$if(scrlayer)$
-  \usepackage{scrlayer}
-$endif$
-
-%--------------to define and manage page styles (see pkg "fancyhdr" too)
-$if(scrlayer-scrpage)$
-  \usepackage{scrlayer-scrpage}
-$endif$
-
-%----------------------to control note columns parallel to the main text
-$if(scrlayer-notecolumn)$
-  \usepackage{scrlayer-notecolumn}
-  $if(notecolumnfontsize)$
-    %-------------set side note column (needs pkg "scrlayer-notecolumn")
-    \setkomafont{notecolumn.marginpar}{$notecolumnfontsize$}
-  $endif$
-$endif$
-
 %---to mix onecolumn and twocolumn modes for example for wide equations.
 %-------------------------------------usage: \begin{strip}...\end{strip}
 $if(cuted)$
@@ -142,16 +996,13 @@ $if(lplfitch)$
   \usepackage{lplfitch}
 $endif$
 
-%-------------for advanced math typesetting (loads all default math pkg)
+%------------ for advanced math typesetting (loads all default math pkg)
+%---------------------------------- amsmath and amssymb loaded elsewhere
 $if(math)$
 %---------------------------------mathematical tools to use with amsmath
   \usepackage{mathtools}
-%----------------------------------ams mathematical facilities for LaTeX
-  %\usepackage{amsmath}%-------------------------- loaded somewhere else
 %-----------------------TeX fonts from the american mathematical society
   \usepackage{amsfonts}
-%----------------------------------------additional mathematical symbols
-  %\usepackage{amssymb}%-------------------------- loaded somewhere else
 %--------------------------typesetting of custom theorems (in ams style)
   \usepackage{amsthm}
 %----------------------------------------dirac bra-ket and set notations
@@ -250,11 +1101,6 @@ $if(ccicons)$
   \usepackage{ccicons}
 $endif$
 
-%---------------------------set pagestyle (needs pkg "scrlayer-scrpage")
-$if(scrheadings)$
-  \pagestyle{scrheadings}
-$endif$
-
 %-------------------------float (load pkg "float" before pkg "hyperref")
 $if(float)$
   \usepackage{float}
@@ -335,6 +1181,7 @@ $if(linestretch)$
   \usepackage{setspace}
 $endif$
 %----------------------------------------- fontspec, XeTeX, LuaTeX setup
+%--------------------------`unicode-math` and `mathspec` load `fontspec`
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
@@ -558,7 +1405,8 @@ $if(definecolors)$
   $endfor$
 $endif$
 %-------------------------------extensive support for hypertext in LaTeX
-\usepackage{hyperref}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \hypersetup{
 $if(title-meta)$
   pdftitle={$title-meta$},
@@ -591,9 +1439,16 @@ $else$
     pdfborder={0 0 0},
   $endif$
 $endif$
+$if(pdfcreator)$
+  pdfcreator={$pdfcreator$},
+$else$
+  pdfcreator={LaTeX and Pandoc},
+$endif$
 breaklinks=true}
 $if(urlstyle)$
   \urlstyle{$urlstyle$}
+$else$
+  \urlstyle{same}
 $endif$
 %------------------------------------- verbatim in footnotes (see above)
 %------------ looks like this needs to come after hyperref, not sure why
@@ -606,6 +1461,8 @@ $endif$
 $if(listings)$
   \usepackage{listings}
   \newcommand{\passthrough}[1]{#1}
+  \lstset{defaultdialect=[5.3]Lua}
+  \lstset{defaultdialect=[x86masm]Assembler}
 $endif$
 $if(lhs)$
   \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
@@ -621,73 +1478,84 @@ $endif$
 $if(tables)$
   \usepackage{longtable,booktabs,array}
   \usepackage{calc} % for calculating minipage widths
-%-------------------------to create tabular cells spanning multiple rows
+  %-----------------------to create tabular cells spanning multiple rows
   $if(multirow)$
     \usepackage{multirow}
   $endif$
   $--$ commenting out beamer code
   $--$ $if(beamer)$
   $--$ \usepackage{caption}
-  $--$ % These lines are needed to make table captions work with longtable:
+  $--$ % Make caption package work with longtable
   $--$ \makeatletter
   $--$ \def\fnum@table{\tablename~\thetable}
   $--$ \makeatother
   $--$ $else$
-  % Fix footnotes in tables (requires footnote package)
-  \IfFileExists{footnote.sty}{\usepackage{footnote}\makesavenoteenv{longtable}}{}
+  % Correct order of tables after \paragraph or \subparagraph
+  \usepackage{etoolbox}
+  \makeatletter
+  \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+  \makeatother
+  % Allow footnotes in longtable head/foot
+  \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+  \makesavenoteenv{longtable}
   $--$ $endif$
+  %---------------------------------------------------- LONGTABLE BUGFIX
+  %------------redefine longtable because it doesn't work in multicolumn
+  %----------------------------------------------------solves the error:
+  %---------"! Package longtable Error: longtable not in 1-column mode."
+  %----------------------------occuring in twocolumn mode (class option)
+  %-----------------see issue: https://github.com/jgm/pandoc/issues/1023
+  %----------------------------source: Marco Torchian@tex.stackexchange:
+  %-------------------------https://tex.stackexchange.com/q/161431/43790
+  %------------------------------------------------------------start fix
+  $if(longtablefix)$
+    \makeatletter
+    \let\oldlt\longtable
+    \let\endoldlt\endlongtable
+    \def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
+    \def\longtable@i[#1]{\begin{figure*}[t]
+    \onecolumn
+    \centering
+    \begin{minipage}{0.99\textwidth}
+    \oldlt[#1]
+    }
+    \def\longtable@ii{\begin{figure*}[t]
+    \onecolumn
+    \centering
+    \begin{minipage}{0.99\textwidth}
+    \oldlt
+    }
+    \def\endlongtable{\endoldlt
+    \end{minipage}
+    %--------to switch back to "\onecolumn"/"\twocolumn" if classoption is
+    %-----------------------------------------------"oncolumn"/"twocolumn"
+    \ifonecol
+    \onecolumn
+    \else
+    \twocolumn
+    \fi
+    \end{figure*}}
+    \makeatother
+  $endif$
+  %--------------------------------------------------------------end fix
 $endif$
-%-----------------------------------------------------------------BUGFIX
-%--------------redefine longtable because it doesn't work in multicolumn
-%------------------------------------------------------solves the error:
-%-----------"! Package longtable Error: longtable not in 1-column mode."
-%------------------------------occuring in twocolumn mode (class option)
-%-------------------see issue: https://github.com/jgm/pandoc/issues/1023
-%------------------------------source: Marco Torchian@tex.stackexchange:
-%---------------------------https://tex.stackexchange.com/q/161431/43790
-%--------------------------------------------------------------start fix
-\makeatletter
-\let\oldlt\longtable
-\let\endoldlt\endlongtable
-\def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
-\def\longtable@i[#1]{\begin{figure*}[t]
-\onecolumn
-\centering
-\begin{minipage}{0.99\textwidth}
-\oldlt[#1]
-}
-\def\longtable@ii{\begin{figure*}[t]
-\onecolumn
-\centering
-\begin{minipage}{0.99\textwidth}
-\oldlt
-}
-\def\endlongtable{\endoldlt
-\end{minipage}
-%----------to switch back to "\onecolumn"/"\twocolumn" if classoption is
-%-------------------------------------------------"oncolumn"/"twocolumn"
-\ifonecol
-\onecolumn
-\else
-\twocolumn
-\fi
-\end{figure*}}
-\makeatother
-%----------------------------------------------------------------end fix
-
 
 %-------------------------------------------------------------- Graphics
 %-------------------------------- graphicx to embed pictures in document
 $if(graphics)$
-\usepackage{graphicx,grffile}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+  \usepackage{graphicx,grffile}
+  \makeatletter
+  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+  \makeatother
+  % Scale images if necessary, so that they will not overflow the page
+  % margins by default, and it is still possible to overwrite the defaults
+  % using explicit options in \includegraphics[width, height, ...]{}
+  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+  % Set default figure placement to htbp
+  \makeatletter
+  \def\fps@figure{htbp}
+  \makeatother
 $endif$
 
 %------------------------------------ More beamer handling (deactivated)
@@ -736,7 +1604,7 @@ $if(links-as-notes)$
 $endif$
 
 %-------------------------------------------------------- strikeout text
-%---------------------- `strikeout` variable automatically set by Pandoc
+%---------------- Pandoc automatically sets the `strikeout` metavariable
 $if(strikeout)$
   \usepackage[normalem]{ulem}
   % avoid problems with \sout in headers with hyperref:
@@ -756,17 +1624,16 @@ $else$
 $endif$
 $if(beamer)$
 $else$
-  $if(subparagraph)$
-  $else$
-  % Redefines (sub)paragraphs to behave more like sections
-  \ifx\paragraph\undefined\else
-  \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-  \fi
-  \ifx\subparagraph\undefined\else
-  \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-  \fi
+  $if(block-headings)$
+    % Make \paragraph and \subparagraph free-standing
+    \ifx\paragraph\undefined\else
+      \let\oldparagraph\paragraph
+      \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+    \fi
+    \ifx\subparagraph\undefined\else
+      \let\oldsubparagraph\subparagraph
+      \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+    \fi
   $endif$
 $endif$
 
@@ -812,86 +1679,17 @@ $if(csl-refs)$
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
 
-%================================================== USER HEADER-INCLUDES
-$for(header-includes)$
-$header-includes$
-$endfor$
-
-
-%===================================================== LANGUAGES SUPPORT
-%---------------------------------------------- polyglossia, babel, bidi
-$if(lang)$
-\ifXeTeX
-%------------ in XeTeX/LuaLaTeX we use `polyglossia` rather than `babel`
-%------------------------- load it as late as possible but before `bidi`
-  \usepackage{polyglossia}
-  \setmainlanguage[$for(polyglossia-lang.options)$$it$$sep$,$endfor$]{$polyglossia-lang.name$}
-  $for(polyglossia-otherlangs)$
-    \setotherlanguage[$for(polyglossia-otherlangs.options)$$it$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
-  $endfor$
-\else
-  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
-%------------------babel hack to get rid of language-specific shorthands
-%----------------------------------will not be needed in the near future
-%------------------------see <https://github.com/jgm/pandoc/issues/6817>
-  \let\LanguageShortHands\languageshorthands
-  \def\languageshorthands#1{}
-  $if(babel-newcommands)$
-    $babel-newcommands$
-  $endif$
-\fi
-$endif$
-%------------------------language-sensitive removal of illegal ligatures
-%----------------------------------------------------(requires LuaLaTeX)
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-%------------------------------------------------left-to-right languages
-$if(dir)$
-\ifXeTeX
-  % Load bidi as late as possible as it modifies e.g. graphicx
-  \usepackage{bidi}
-\fi
-\ifPDFTeX
-  \TeXXeTstate=1
-  \newcommand{\RL}[1]{\beginR #1\endR}
-  \newcommand{\LR}[1]{\beginL #1\endL}
-  \newenvironment{RTL}{\beginR}{\endR}
-  \newenvironment{LTR}{\beginL}{\endL}
-\fi
-$endif$
-
-%========================================================== BIBLIOGRAPHY
-%--------------------------------------load natbib or biblatex if needed
-$if(natbib)$
-  \usepackage[$natbiboptions$]{natbib}
-  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-$endif$
-$if(biblatex)$
-  \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$%
-  $for(biblatexoptions)$$it$$sep$,$endfor$]{biblatex}
-  $for(bibliography)$
-    \addbibresource{$it$}
+%------------------------------------------------- GEOMETRY: set lengths
+%----------------------------- placed here to allow the user to override 
+%-------------------------------- anything that the template sets above. 
+$if(setlength)$
+  $for(setlength)$
+    $if(it.length)$$if(it.value)$
+      \setlength{\$it.length$}{$it.value$}
+    $endif$$endif$
   $endfor$
 $endif$
 
-$if(nocite-ids)$
-  \nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
-$endif$
-$if(csquotes)$
-  \usepackage{csquotes}
-$endif$
-
-%======================================================== EXTRA SETTINGS
-%-----------------------------to make TeX less fussy about line breaking
-$if(sloppy)$
-  \sloppy
-$endif$
-
-%----------------------------two typeset table of contents in two column
-$if(twocol_toc)$
-  \unsettoc{toc}{onecolumn}
-$endif$
 
 %=========================================================== TITLE PAGES
 %-----------------------------------------------------------------------
@@ -900,6 +1698,9 @@ $endif$
 %-------------------------------------- We can use predefined templates,
 %---------------------------------------------------- complete raw code,
 %-------------------------------------or a field-by-field specification.
+%-----------------------------------------------------------------------
+%------------ placed before header-includes to allow for user overriding
+%--------------------------------------------- (e.g. via Pandoc filters)
 %-----------------------------------------------------------------------
 
 %--------------------------------------------------- Raw titlepages code
@@ -972,49 +1773,133 @@ $else$
     $dedicationcode$ %
     }
   $endif$
-%        ---------------------------------------------------- dedication
- $if(publishercode)$
-    \publisher{%
-    $publishercode$ %
+%        ---------------------------------------------------- publishers
+%        ---------------------------------------can be used as titlefoot
+%        ------------------------------------------------ with a \parbox
+ $if(publisherscode)$
+    \publishers{%
+    $publisherscode$ %
+    }
+  $endif$
+%        ------------------------------------- upper and lower titleback
+ $if(uppertitlebackcode)$
+    \uppertitleback{%
+    $uppertitlebackcode$ %
+    }
+  $endif$
+ $if(lowertitlebackcode)$
+    \lowertitleback{%
+    $lowertitlebackcode$ %
     }
   $endif$
 
 $endif$
 
+%================================================== USER HEADER-INCLUDES
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+
+%===================================================== LANGUAGES SUPPORT
+%---------------------------------------------- polyglossia, babel, bidi
+$if(lang)$
+\ifXeTeX
+%---------------------------------- `polyglossia` requires XeTeX/XeLaTeX
+%------------------------- load it as late as possible but before `bidi`
+  \usepackage{polyglossia}
+  \setmainlanguage[$for(polyglossia-lang.options)$$it$$sep$,$endfor$]{$polyglossia-lang.name$}
+  $for(polyglossia-otherlangs)$
+    \setotherlanguage[$for(polyglossia-otherlangs.options)$$it$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
+  $endfor$
+\else
+  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+%------------------babel hack to get rid of language-specific shorthands
+%----------------------------------will not be needed in the near future
+%------------------------see <https://github.com/jgm/pandoc/issues/6817>
+  \let\LanguageShortHands\languageshorthands
+  \def\languageshorthands#1{}
+  $if(babel-newcommands)$
+    $babel-newcommands$
+  $endif$
+\fi
+$endif$
+%------------------------language-sensitive removal of illegal ligatures
+%----------------------------------------------------(requires LuaLaTeX)
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+%------------------------------------------------left-to-right languages
+$if(dir)$
+\ifXeTeX
+  % Load bidi as late as possible as it modifies e.g. graphicx
+  \usepackage{bidi}
+\fi
+\ifPDFTeX
+  \TeXXeTstate=1
+  \newcommand{\RL}[1]{\beginR #1\endR}
+  \newcommand{\LR}[1]{\beginL #1\endL}
+  \newenvironment{RTL}{\beginR}{\endR}
+  \newenvironment{LTR}{\beginL}{\endL}
+\fi
+$endif$
+
+%========================================================== BIBLIOGRAPHY
+%--------------------------------------load natbib or biblatex if needed
+$if(natbib)$
+  \usepackage[$natbiboptions$]{natbib}
+  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+$endif$
+$if(biblatex)$
+  \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$%
+  $for(biblatexoptions)$$it$$sep$,$endfor$]{biblatex}
+  $for(bibliography)$
+    \addbibresource{$it$}
+  $endfor$
+$endif$
+
+$if(nocite-ids)$
+  \nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(csquotes)$
+  \usepackage{csquotes}
+$endif$
+
+%======================================================== EXTRA SETTINGS
+%-----------------------------to make TeX less fussy about line breaking
+$if(sloppy)$
+  \sloppy
+$endif$
+
+%----------------------------two typeset table of contents in two column
+$if(twocol_toc)$
+  \unsettoc{toc}{onecolumn}
+$endif$
+
+%-------------------------------------------------------- french spacing
+$if(frenchspacing)$
+  \frenchspacing
+$endif$
+
 %================================================== DOCUMENT STARTS HERE
 \begin{document}
-%-----------------------------------------------print title page(s) here
-%----------------------------------- use maketitle unless told otherwise
-%------------------------------ if not place any raw titlepage code here
-$if(nomaketitle)$
-  $if(rawtitlecode)$
-     $rawtitlecode$
-  $endif$
-$elseif(title)$
-  $if(beamer)$
-  \frame{\titlepage}
-  $else$
-  \maketitle
-  $endif$
-  $if(abstract)$
-  \begin{abstract}
-  $abstract$
-  \end{abstract}
-  $endif$
-$endif$
-
-$if(aftertitlecode)$
-  $aftertitlecode$
-$endif$
-
 %----------------------------------------------- frontmatter starts here
 $if(has-frontmatter)$
 \frontmatter
 $endif$
 
+%-----------------------------------------------print title page(s) here
+%----------------------------------- use maketitle unless told otherwise
+%------------------------------ if not place any raw titlepage code here
+%----------------------------- maketitle-page to set title's page number
+$if(nomaketitle)$
+  $if(rawtitlecode)$$rawtitlecode$$endif$
+$else$
+  \maketitle$if(maketitle-page)$[$maketitle-page$]$endif$
+$endif$
+
 $for(include-before)$
 $include-before$
-
 $endfor$
 
 $if(toc)$
@@ -1054,8 +1939,12 @@ $if(has-frontmatter)$
 $endif$
 $body$
 %------------------------------------------------ backmatter starts here
+%---------------------------------------- only issue \backmatter if used
 $if(has-frontmatter)$
-\backmatter
+  $if(natbib)$\backmatter
+  $elseif(biblatex)$\backmatter
+  $elseif(include-after)$\backmatter
+  $endif$
 $endif$
 
 $if(natbib)$

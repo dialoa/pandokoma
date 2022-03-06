@@ -38,6 +38,10 @@ raggedbottom: true # superfluous, this is the default setting
 # default:
 indent: true
 
+# frenchspacing
+# use french spacing (normal interword spaces after dots).
+frenchspacing: true
+
 # FOOTNOTES
 # ======================================================================
 # redesign the footnotes
