@@ -1,23 +1,22 @@
+SOURCES = $(wildcard *.yaml)
+TARGETS_TEX = $(patsubst %.yaml,%.tex,$(wildcard *.yaml))
+TARGETS_PDF = $(patsubst %.yaml,%.pdf,$(wildcard *.yaml))
+engine = lualatex # use `make article.pdf engine=pdflatex` to change
+
 all: tex pdf
 
-tex: plain.tex oldstyle.tex
+tex: $(TARGETS_TEX)
 
-pdf: plain.pdf oldstyle.pdf
+pdf: $(TARGETS_PDF)
 
-plain.tex: source.md plain.yaml ../code/template.latex
-	pandoc -s --metadata-file plain.yaml --template ../code/template.latex \
-		$< -o $@ 
+$(TARGETS_TEX): %.tex : %.yaml source.md ../code/template.latex
+	pandoc -s --metadata-file $< --template ../code/template.latex \
+		source.md -o $@ 
 
-plain.pdf: source.md plain.yaml ../code/template.latex
-	pandoc -s --metadata-file plain.yaml --template ../code/template.latex \
-		$< -o $@ 
+$(TARGETS_PDF):  %.pdf : %.yaml source.md ../code/template.latex
+	pandoc -s --metadata-file $< --template ../code/template.latex \
+		source.md -o $@ --pdf-engine $(engine)
 
-oldstyle.tex: source.md oldstyle.yaml ../code/template.latex
-	pandoc -s --metadata-file oldstyle.yaml --template ../code/template.latex \
-		$< -o $@ 
-
-oldstyle.pdf: source.md oldstyle.yaml ../code/template.latex
-	pandoc -s --metadata-file oldstyle.yaml --template ../code/template.latex \
-	--pdf-engine lualatex \
-		$< -o $@ 
-
+clean:
+	@echo "Cleaning pdf and tex files"
+	@rm *.pdf *.tex

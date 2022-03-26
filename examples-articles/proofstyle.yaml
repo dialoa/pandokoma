@@ -57,42 +57,6 @@ setfootnoterule:
 # FONT MANAGEMENT
 # ======================================================================
 
-# font families
-mainfont: 'Libertinus Serif'
-sansfont: 'Libertinus Sans'
-monofont: 'Libertinus Mono'
-mathfont: 'Libertinus Math'
-CJKmainfont:
-
-# options to use with mainfont, sansfont, monofont, mathfont, CJKmainfont in
-# xelatex and lualatex. Allow for any choices available through fontspec, such
-# as the OpenType features Numbers=OldStyle,Numbers=Proportional. May be
-# specified as string or list.
-# default:
-mainfontoptions: 'Numbers=OldStyle'
-sansfontoptions:
-monofontoptions:
-mathfontoptions:
-CJKoptions:
-
-# `disposition` is KOMA's default style for headings
-setkomafonts:
-- element: disposition
-  font: 'Libertinus Serif'
-  fontoptions: 'Numbers=OldStyle'
-  default: \scshape
-- element: titlehead
-  default: \usekomafont{disposition}
-
-# define a display font style
-newkomafonts:
-- element: display
-  font: 'Libertinus Serif Display'
-  fontoptions: 'Numbers=OldStyle'
-
-addtokomafonts:
-- element: title
-  commands: \usekomafont{display}
 
 definecolors:
 - name: newblue
@@ -115,3 +79,11 @@ toccolor: black
 # default:
 scrlayer-scrpage: true
 
+# activate proof mode
+proofmode: true
+# we could use watermark and linenumbers instead
+# draftwatermark: true
+# draftwatermarkoptions:
+#   - fontsize=.6\paperwidth
+#   - text=CONFIDENTIAL
+# linenumbers: true

@@ -1091,8 +1091,7 @@ $if(draftwatermark)$
 $endif$
 $if(linenumbers)$
   \usepackage{lineno}
-$endif$
-$if(lineno)$
+$elseif(lineno)$
   \usepackage{lineno}
 $endif$
 
@@ -1934,6 +1933,13 @@ $if(has-frontmatter)$
     \mainmatter
   $endif$
 $endif$
+%----------------------- start line numbering if needed (package lineno)
+$if(linenumbers)$
+  \linenumbers
+$elseif(lineno)$
+  \linenumbers
+$endif$
+%------------------------------------------------------ body starts here
 $body$
 %------------------------------------------------ backmatter starts here
 %---------------------------------------- only issue \backmatter if used

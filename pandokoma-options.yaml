@@ -662,12 +662,11 @@ verbatim:
 # default:
 lettrine:
 
-# to avoid widows
-# default: true
-nowidow: true
-# default:
-#  - 'defaultlines=3'
-#  - 'all'
+# nowidow: load the `nowidow`package to avoid widows
+# set this to true to use the `nowidow` package 
+nowidow: 
+# nowidow options
+# list of options for the nowidow package
 nowidowoptions:
 
 # to generate lorem ipsum blind text text for testing purposes
@@ -682,20 +681,25 @@ kantlipsum:
 # default:
 showframe:
 
-# to print watermarks and line numbers
-# firstpage to put a watermark text only on the first page
-# nostamp for quickly removing the “draft” status from a document
-# default:
+# proofmode: set to true to print a "PROOF" watermark
+# and line numbers. Shorthand for the `draftwatermark`
+# and `linenumbers` options below.
+proofmode:
+
+# drafwatermark: set to yes to add a watermark
 draftwatermark:
-# default:
-#  - 'firstpage'
-#  - 'nostamp'
-#  - 'titlepage'
+# draftwatermark options: list of options 
+# for the draftwatermark package. See package
+# documentation for details.
+# Example:
+# draftwatermarkoptions:
+#   - 'firstpageonly'
+#   - 'stamp=false'
+#   - 'titlepage'
 draftwatermarkoptions:
-  - 'firstpage'
-  - 'nostamp'
-  - 'titlepage'
-# default:
+
+# linenumbers: line numbering with the lineno package
+# alias `lineno`
 linenumbers: 
 
 # to include the creative commons icons in my document

@@ -1085,16 +1085,26 @@ $if(showframe)$
 $endif$
 
 %-----------------------------------to print watermarks and line numbers
+%-------------------- `proofmode` a shorthand for both with 'PROOF' mark
+%------------- NB draftwatermark needs a fontsize setting as the default
+%----------------- doesn't work with scrartcl. This setting is overidden 
+%----------------- if the user specifies their own `fontsize=...` option 
+%---------------------------------------------  in draftwatermarkoptions
+
 $if(draftwatermark)$
-  \usepackage[$for(draftwatermarkoptions)$$it$$sep$,$endfor$%
+  \usepackage[fontsize=0.25\paperwidth,
+  $for(draftwatermarkoptions)$$it$$sep$,$endfor$%
   ]{draftwatermark}
-$endif$
+$elseif(proofmode)$
+  \usepackage[fontsize=0.25\paperwidth,text=PROOF]{draftwatermark}
+$end$
 $if(linenumbers)$
   \usepackage{lineno}
-$endif$
-$if(lineno)$
+$elseif(lineno)$
   \usepackage{lineno}
-$endif$
+$elseif(proofmode)$
+  \usepackage{lineno}
+$end$
 
 %-------------------to include the creative commons icons in my document
 $if(ccicons)$
@@ -1927,7 +1937,6 @@ $if(lof)$
 \listoffigures
 $endif$
 
-
 %------------------------------------------------ mainmatter starts here
 %---------------------------- if the user provides their own \mainmatter
 %-------------------------- command they should set `mainmatter` to true
@@ -1937,6 +1946,15 @@ $if(has-frontmatter)$
     \mainmatter
   $endif$
 $endif$
+%----------------------- start line numbering if needed (package lineno)
+$if(linenumbers)$
+  \linenumbers
+$elseif(lineno)$
+  \linenumbers
+$elseif(proofmode)$
+  \linenumbers
+$end$
+%------------------------------------------------------ body starts here
 $body$
 %------------------------------------------------ backmatter starts here
 %---------------------------------------- only issue \backmatter if used
