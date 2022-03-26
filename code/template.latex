@@ -1097,14 +1097,14 @@ $if(draftwatermark)$
   ]{draftwatermark}
 $elseif(proofmode)$
   \usepackage[fontsize=0.25\paperwidth,text=PROOF]{draftwatermark}
-$end$
+$endif$
 $if(linenumbers)$
   \usepackage{lineno}
 $elseif(lineno)$
   \usepackage{lineno}
 $elseif(proofmode)$
   \usepackage{lineno}
-$end$
+$endif$
 
 %-------------------to include the creative commons icons in my document
 $if(ccicons)$
@@ -1953,7 +1953,7 @@ $elseif(lineno)$
   \linenumbers
 $elseif(proofmode)$
   \linenumbers
-$end$
+$endif$
 %------------------------------------------------------ body starts here
 $body$
 %------------------------------------------------ backmatter starts here
