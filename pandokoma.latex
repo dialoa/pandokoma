@@ -1085,13 +1085,24 @@ $if(showframe)$
 $endif$
 
 %-----------------------------------to print watermarks and line numbers
+%-------------------- `proofmode` a shorthand for both with 'PROOF' mark
+%------------- NB draftwatermark needs a fontsize setting as the default
+%----------------- doesn't work with scrartcl. This setting is overidden 
+%----------------- if the user specifies their own `fontsize=...` option 
+%---------------------------------------------  in draftwatermarkoptions
+
 $if(draftwatermark)$
-  \usepackage[$for(draftwatermarkoptions)$$it$$sep$,$endfor$%
+  \usepackage[fontsize=0.25\paperwidth,
+  $for(draftwatermarkoptions)$$it$$sep$,$endfor$%
   ]{draftwatermark}
+$elseif(proofmode)$
+  \usepackage[fontsize=0.25\paperwidth,text=PROOF]{draftwatermark}
 $endif$
 $if(linenumbers)$
   \usepackage{lineno}
 $elseif(lineno)$
+  \usepackage{lineno}
+$elseif(proofmode)$
   \usepackage{lineno}
 $endif$
 
@@ -2546,7 +2557,6 @@ $if(lof)$
 \listoffigures
 $endif$
 
-
 %------------------------------------------------ mainmatter starts here
 %---------------------------- if the user provides their own \mainmatter
 %-------------------------- command they should set `mainmatter` to true
@@ -2560,6 +2570,8 @@ $endif$
 $if(linenumbers)$
   \linenumbers
 $elseif(lineno)$
+  \linenumbers
+$elseif(proofmode)$
   \linenumbers
 $endif$
 %------------------------------------------------------ body starts here
