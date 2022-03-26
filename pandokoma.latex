@@ -1086,17 +1086,17 @@ $endif$
 
 %-----------------------------------to print watermarks and line numbers
 %-------------------- `proofmode` a shorthand for both with 'PROOF' mark
-%------------- NB draftwatermark needs a fontsize setting as the default
-%----------------- doesn't work with scrartcl. This setting is overidden 
-%----------------- if the user specifies their own `fontsize=...` option 
-%---------------------------------------------  in draftwatermarkoptions
+%------------- NB providing a default fontsize setting to draftwatermark 
+%-------------------  as the default doesn't seem to work with scrartcl. 
+%------------------------------ Will be overridden if the user specifies  
+%---------------their own `fontsize=...` option in draftwatermarkoptions
 
 $if(draftwatermark)$
-  \usepackage[fontsize=0.25\paperwidth,
+  \usepackage[fontsize=0.25\textwidth,
   $for(draftwatermarkoptions)$$it$$sep$,$endfor$%
   ]{draftwatermark}
 $elseif(proofmode)$
-  \usepackage[fontsize=0.25\paperwidth,text=PROOF]{draftwatermark}
+  \usepackage[fontsize=0.25\textwidth,text=PROOF]{draftwatermark}
 $endif$
 $if(linenumbers)$
   \usepackage{lineno}
