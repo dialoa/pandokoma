@@ -9,12 +9,12 @@ tex: $(TARGETS_TEX)
 
 pdf: $(TARGETS_PDF)
 
-$(TARGETS_TEX): %.tex : %.yaml source.md ../code/template.latex
-	pandoc -s --metadata-file $< --template ../code/template.latex \
+$(TARGETS_TEX): %.tex : %.yaml source.md ../src/template.latex
+	pandoc -s --metadata-file $< --template ../src/template.latex \
 		source.md -o $@ 
 
-$(TARGETS_PDF):  %.pdf : %.yaml source.md ../code/template.latex
-	pandoc -s --metadata-file $< --template ../code/template.latex \
+$(TARGETS_PDF):  %.pdf : %.yaml source.md ../src/template.latex
+	pandoc -s --metadata-file $< --template ../src/template.latex \
 		source.md -o $@ --pdf-engine $(engine)
 
 clean:

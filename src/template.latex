@@ -33,10 +33,6 @@ $endif$
     $if(fontsize)$$fontsize$,$endif$%
     $if(lang)$$babel-lang$,$endif$%
     $if(papersize)$$papersize$paper,$endif$%
-    $if(beamer)$ignorenonframetext,% $-- BEAMER Only$
-      $if(handout)$handout,$endif$%
-      $if(aspectratio)$aspectratio=$aspectratio$,$endif$%
-    $endif$%
     $for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 $if(komaoptions)$
   $for(komaoptions)$
@@ -68,11 +64,7 @@ $else$\raggedbottom
 $endif$
 %-------------------------------------------------- geometry and options
 $if(geometry)$
-  $if(beamer)$
-    \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
-  $else$
-  \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
-  $endif$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
 %-------------------------------------------------------- define lengths
 %------------------ NB: setlength is implemented later on to allow users
@@ -1119,63 +1111,6 @@ $endif$
 %--------------------------------------------------------COMMON SETTINGS
 %----------------------------------------------Pandoc's default template
 
-$--$ Commenting out beamer handling
-$--$ 
-$--$ $if(beamer)$
-$--$ $if(background-image)$
-$--$ \usebackgroundtemplate{%
-$--$   \includegraphics[width=\paperwidth]{$background-image$}%
-$--$ }
-$--$ $endif$
-$--$ \usepackage{pgfpages}
-$--$ \setbeamertemplate{caption}[numbered]
-$--$ \setbeamertemplate{caption label separator}{: }
-$--$ \setbeamercolor{caption name}{fg=normal text.fg}
-$--$ \beamertemplatenavigationsymbols$if(navigation)$$navigation$$else$empty$endif$
-$--$ $for(beameroption)$
-$--$ \setbeameroption{$beameroption$}
-$--$ $endfor$
-$--$ % Prevent slide breaks in the middle of a paragraph
-$--$ \widowpenalties 1 10000
-$--$ \raggedbottom
-$--$ $if(section-titles)$
-$--$ \setbeamertemplate{part page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sep=16pt,center]{part title}
-$--$     \usebeamerfont{part title}\insertpart\par
-$--$   \end{beamercolorbox}
-$--$ }
-$--$ \setbeamertemplate{section page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sep=12pt,center]{part title}
-$--$     \usebeamerfont{section title}\insertsection\par
-$--$   \end{beamercolorbox}
-$--$ }
-$--$ \setbeamertemplate{subsection page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sep=8pt,center]{part title}
-$--$     \usebeamerfont{subsection title}\insertsubsection\par
-$--$   \end{beamercolorbox}
-$--$ }
-$--$ \AtBeginPart{
-$--$   \frame{\partpage}
-$--$ }
-$--$ \AtBeginSection{
-$--$   \ifbibliography
-$--$   \else
-$--$     \frame{\sectionpage}
-$--$   \fi
-$--$ }
-$--$ \AtBeginSubsection{
-$--$   \frame{\subsectionpage}
-$--$ }
-$--$ $endif$
-$--$ $endif$
-$--$ $if(beamerarticle)$
-$--$ \usepackage{beamerarticle} % needs to be loaded first
-$--$ $endif$
-$--$
-
 %======================================================= FONT MANAGEMENT
 %---------------------------------- commmon math symbols and typesetting
 %-------------------------------------------------------- (AMS packages)
@@ -1336,33 +1271,6 @@ $if(aliaskomafonts)$
   $endfor$
 $endif$
 
-%------------------------------------------------ beamer theme (removed)
-$--$ $if(beamer)$
-$--$   $if(theme)$
-$--$     \usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
-$--$   $endif$
-$--$   $if(colortheme)$
-$--$     \usecolortheme{$colortheme$}
-$--$   $endif$
-$--$   $if(fonttheme)$
-$--$     \usefonttheme{$fonttheme$}
-$--$   $endif$
-$--$ $if(mainfont)$
-$--$ \usefonttheme{serif} % use mainfont rather than sansfont for slide text
-$--$ $endif$
-$--$ $if(innertheme)$
-$--$ \useinnertheme{$innertheme$}
-$--$ $endif$
-$--$ $if(outertheme)$
-$--$ \useoutertheme{$outertheme$}
-$--$ $endif$
-$--$ $endif$
-
-$--$ this is located after geometry in Pandoc's default template
-$--$ $if(beamer)$
-$--$ \newif\ifbibliography
-$--$ $endif$
-
 %------------------ upquote for straight quotes in verbatim environments
 %------------------------------------------------------ use if available
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -1381,12 +1289,16 @@ $--$ $endif$
 %------------------------ paragraph separation: indent or vertical space
 $if(indent)$
 $else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
   \IfFileExists{parskip.sty}{%
-  \usepackage{parskip}
+    \usepackage{parskip}
   }{% else
-  \setlength{\parindent}{0pt}
-  \setlength{\parskip}{6pt plus 2pt minus 1pt}
-  }
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
 $endif$
 
 % ---------------------------------------- support for verbatim in notes
@@ -1413,57 +1325,6 @@ $if(definecolors)$
       $for(it.spec)$$it$$sep$,$endfor$}
     $endif$$endif$$endif$
   $endfor$
-$endif$
-%-------------------------------extensive support for hypertext in LaTeX
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\hypersetup{
-$if(title-meta)$
-  pdftitle={$title-meta$},
-$endif$
-$if(author-meta)$
-  pdfauthor={$author-meta$},
-$endif$
-$if(keywords)$
-  pdfkeywords={$for(keywords)$$it$$sep$, $endfor$},
-$endif$
-$if(linksborderstyle)$
-  pdfborderstyle={$linksborderstyle$},
-$endif$
-$if(colorlinks)$
-  colorlinks=true,
-  linkcolor=$if(linkcolor)$$linkcolor$$else$red$endif$,
-  citecolor=$if(citecolor)$$citecolor$$else$blue$endif$,
-  urlcolor=$if(urlcolor)$$urlcolor$$else$blue$endif$,
-$else$
-  $if(linksborder)$
-    pdfborder={$if(linksborder.vcornerradius)$$linksborder.vcornerradius$$else$0$endif$ %
-    $if(linksborder.hcornerradius)$$linksborder.hcornerradius$$else$0$endif$ %
-    $if(linksborder.width)$$linksborder.width$$else$0$endif$ %
-    $if(linksborder.dashpattern)$[ $for(linksborder.dashpattern)$$it$$sep$ $endfor$ ] $endif$%
-    },
-    linkbordercolor=$if(linkbordercolor)$$linkbordercolor$$else$red$endif$,
-    citebordercolor=$if(citebordercolor)$$citebordercolor$$else$blue$endif$,
-    urlbordercolor=$if(urlbordercolor)$$urlbordercolor$$else$blue$endif$,    
-  $else$
-    pdfborder={0 0 0},
-  $endif$
-$endif$
-$if(pdfcreator)$
-  pdfcreator={$pdfcreator$},
-$else$
-  pdfcreator={LaTeX and Pandoc},
-$endif$
-breaklinks=true}
-$if(urlstyle)$
-  \urlstyle{$urlstyle$}
-$else$
-  \urlstyle{same}
-$endif$
-%------------------------------------- verbatim in footnotes (see above)
-%------------ looks like this needs to come after hyperref, not sure why
-$if(verbatim-in-note)$
-  \VerbatimFootnotes
 $endif$
 
 %================================== PANDOC AUTOMATIC TYPOGRAPHY SETTINGS
@@ -1492,14 +1353,6 @@ $if(tables)$
   $if(multirow)$
     \usepackage{multirow}
   $endif$
-  $--$ commenting out beamer code
-  $--$ $if(beamer)$
-  $--$ \usepackage{caption}
-  $--$ % Make caption package work with longtable
-  $--$ \makeatletter
-  $--$ \def\fnum@table{\tablename~\thetable}
-  $--$ \makeatother
-  $--$ $else$
   % Correct order of tables after \paragraph or \subparagraph
   \usepackage{etoolbox}
   \makeatletter
@@ -1508,7 +1361,7 @@ $if(tables)$
   % Allow footnotes in longtable head/foot
   \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
   \makesavenoteenv{longtable}
-  $--$ $endif$
+
   %---------------------------------------------------- LONGTABLE BUGFIX
   %------------redefine longtable because it doesn't work in multicolumn
   %----------------------------------------------------solves the error:
@@ -1552,8 +1405,12 @@ $endif$
 
 %-------------------------------------------------------------- Graphics
 %-------------------------------- graphicx to embed pictures in document
+%----------------------------\  fps@figure: default placement of figures
+%---------- Order has no impact: 'htbp' just means that LaTeX is allowed
+%---------------------to try here, at top, bottom or on a separate page. 
+%-------------------It will try h, t, b, p in that order no matter what. 
 $if(graphics)$
-  \usepackage{graphicx,grffile}
+  \usepackage{graphicx}
   \makeatletter
   \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
   \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
@@ -1567,46 +1424,6 @@ $if(graphics)$
   \def\fps@figure{htbp}
   \makeatother
 $endif$
-
-%------------------------------------ More beamer handling (deactivated)
-$--$ $if(beamer)$
-$--$ % Prevent slide breaks in the middle of a paragraph:
-$--$ \widowpenalties 1 10000
-$--$ \raggedbottom
-$--$   $if(section-titles)$
-$--$   \setbeamertemplate{part page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sep=16pt,center]{part title}
-$--$     \usebeamerfont{part title}\insertpart\par
-$--$   \end{beamercolorbox}
-$--$   }
-$--$   \setbeamertemplate{section page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sbooktabsep=12pt,center]{part title}
-$--$     \usebeamerfont{section title}\insertsection\par
-$--$   \end{beamercolorbox}
-$--$   }
-$--$   \setbeamertemplate{subsection page}{
-$--$   \centering
-$--$   \begin{beamercolorbox}[sep=8pt,center]{part title}
-$--$     \usebeamerfont{subsection title}\insertsubsection\par
-$--$   \end{beamercolorbox}
-$--$   }
-$--$   \AtBeginPart{
-$--$     \frame{\partpage}
-$--$   }
-$--$   \AtBeginSection{
-$--$     \ifbibliography
-$--$     \else
-$--$       \frame{\sectionpage}
-$--$     \fi
-$--$   }
-$--$   \AtBeginSubsection{
-$--$     \frame{\subsectionpage}
-$--$   }
-$--$   $endif$
-$--$ $endif$
-
 %------------------------ links-as-notes to turn hotlinks into footnotes
 %------------------------------------------ `links-as-notes` set by user
 $if(links-as-notes)$
@@ -1615,10 +1432,9 @@ $endif$
 
 %-------------------------------------------------------- strikeout text
 %---------------- Pandoc automatically sets the `strikeout` metavariable
+%----------------------------------------------- also used for underline
 $if(strikeout)$
   \usepackage[normalem]{ulem}
-  % avoid problems with \sout in headers with hyperref:
-  \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
 
 %------------------------------------------------ prevent overfull lines
@@ -1632,19 +1448,16 @@ $if(numbersections)$
 $else$
   \setcounter{secnumdepth}{-\maxdimen} % remove sec numbering
 $endif$
-$if(beamer)$
-$else$
-  $if(block-headings)$
-    % Make \paragraph and \subparagraph free-standing
-    \ifx\paragraph\undefined\else
-      \let\oldparagraph\paragraph
-      \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-    \fi
-    \ifx\subparagraph\undefined\else
-      \let\oldsubparagraph\subparagraph
-      \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-    \fi
-  $endif$
+$if(block-headings)$
+  % Make \paragraph and \subparagraph free-standing
+  \ifx\paragraph\undefined\else
+    \let\oldparagraph\paragraph
+    \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \fi
+  \ifx\subparagraph\undefined\else
+    \let\oldsubparagraph\subparagraph
+    \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \fi
 $endif$
 
 %------------------------------------------------------------ Page style
@@ -1652,14 +1465,6 @@ $endif$
 $if(pagestyle)$
 \pagestyle{$pagestyle$}
 $endif$
-
-%-------------------------------------------- Figures: default placement
-%----------Order doesn't matter; 'htbp' just means that LaTeX is allowed
-%---------------------to try here, at top, bottom or on a separate page. 
-%-------------------It will try h, t, b, p in that order no matter what. 
-\makeatletter
-  \def\fps@figure{htbp}
-\makeatother
 
 %------------------------------------------------- Citeproc bibliography
 %---------------------------------- styling commands with default values
@@ -1682,7 +1487,7 @@ $if(csl-refs)$
   \setlength{\parskip}{#2\cslentryspacingunit}
  }%
  {}
-\usepackage{calc} % for calculating inline width
+\usepackage{calc}
 \newcommand{\CSLBlock}[1]{#1\hfill\break}
 \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
 \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
@@ -1805,35 +1610,34 @@ $else$
 
 $endif$
 
+%==================================================  LANGUAGES SUPPORT I
+%--------------------------------------------   (BEFORE HEADER-INCLUDES)
+%--------------------------------------------------- uses babel and bidi
+$if(lang)$
+\ifLuaTeX
+\usepackage[bidi=basic]{babel}
+\else
+\usepackage[bidi=default]{babel}
+\fi
+  $if(babel-lang)$
+  \babelprovide[main,import]{$babel-lang$}
+  $endif$
+  $for(babel-otherlangs)$
+  \babelprovide[import]{$babel-otherlangs$}
+  $endfor$
+  % get rid of language-specific shorthands (see #6817):
+  \let\LanguageShortHands\languageshorthands
+  \def\languageshorthands#1{}
+$endif$
+
 %================================================== USER HEADER-INCLUDES
 $for(header-includes)$
 $header-includes$
 $endfor$
 
-
-%===================================================== LANGUAGES SUPPORT
-%---------------------------------------------- polyglossia, babel, bidi
-$if(lang)$
-\ifXeTeX
-%---------------------------------- `polyglossia` requires XeTeX/XeLaTeX
-%------------------------- load it as late as possible but before `bidi`
-  \usepackage{polyglossia}
-  \setmainlanguage[$for(polyglossia-lang.options)$$it$$sep$,$endfor$]{$polyglossia-lang.name$}
-  $for(polyglossia-otherlangs)$
-    \setotherlanguage[$for(polyglossia-otherlangs.options)$$it$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
-  $endfor$
-\else
-  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
-%------------------babel hack to get rid of language-specific shorthands
-%----------------------------------will not be needed in the near future
-%------------------------see <https://github.com/jgm/pandoc/issues/6817>
-  \let\LanguageShortHands\languageshorthands
-  \def\languageshorthands#1{}
-  $if(babel-newcommands)$
-    $babel-newcommands$
-  $endif$
-\fi
-$endif$
+%================================================== LANGUAGES SUPPORT II
+%--------------------------------------------    (AFTER HEADER-INCLUDES)
+%-----------------------------------------------------------------------
 %------------------------language-sensitive removal of illegal ligatures
 %----------------------------------------------------(requires LuaLaTeX)
 \ifLuaTeX
@@ -1841,10 +1645,6 @@ $endif$
 \fi
 %------------------------------------------------left-to-right languages
 $if(dir)$
-\ifXeTeX
-  % Load bidi as late as possible as it modifies e.g. graphicx
-  \usepackage{bidi}
-\fi
 \ifPDFTeX
   \TeXXeTstate=1
   \newcommand{\RL}[1]{\beginR #1\endR}
@@ -1891,6 +1691,62 @@ $if(frenchspacing)$
   \frenchspacing
 $endif$
 
+%================================================================= LINKS
+%---------------------------------------- hyperref must be loaded last
+%-------------------------------extensive support for hypertext in LaTeX
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+$if(urlstyle)$
+  \urlstyle{$urlstyle$}
+$else$
+  \urlstyle{same} % disable monospaced font for URLs
+$endif$
+\hypersetup{
+$if(title-meta)$
+  pdftitle={$title-meta$},
+$endif$
+$if(author-meta)$
+  pdfauthor={$author-meta$},
+$endif$
+$if(keywords)$
+  pdfkeywords={$for(keywords)$$it$$sep$, $endfor$},
+$endif$
+$if(linksborderstyle)$
+  pdfborderstyle={$linksborderstyle$},
+$endif$
+$if(colorlinks)$
+  colorlinks=true,
+  linkcolor={$if(linkcolor)$$linkcolor$$else$red$endif$},
+  filecolor={$if(filecolor)$$filecolor$$else$red$endif$},
+  citecolor={$if(citecolor)$$citecolor$$else$blue$endif$},
+  urlcolor={$if(urlcolor)$$urlcolor$$else$blue$endif$},
+$else$
+  $if(linksborder)$
+    pdfborder={$if(linksborder.vcornerradius)$$linksborder.vcornerradius$$else$0$endif$ %
+    $if(linksborder.hcornerradius)$$linksborder.hcornerradius$$else$0$endif$ %
+    $if(linksborder.width)$$linksborder.width$$else$0$endif$ %
+    $if(linksborder.dashpattern)$[ $for(linksborder.dashpattern)$$it$$sep$ $endfor$ ] $endif$%
+    },
+    linkbordercolor=$if(linkbordercolor)$$linkbordercolor$$else$red$endif$,
+    filebordercolor=$if(filebordercolor)$$filebordercolor$$else$red$endif$,
+    citebordercolor=$if(citebordercolor)$$citebordercolor$$else$blue$endif$,
+    urlbordercolor=$if(urlbordercolor)$$urlbordercolor$$else$blue$endif$,    
+  $else$
+    hidelinks,
+  $endif$
+$endif$
+$if(pdfcreator)$
+  pdfcreator={$pdfcreator$},
+$else$
+  pdfcreator={LaTeX and Pandoc},
+$endif$
+breaklinks=true}
+%------------------------------------- verbatim in footnotes (see above)
+%------------ looks like this needs to come after hyperref, not sure why
+$if(verbatim-in-note)$
+  \VerbatimFootnotes
+$endif$
+
 %================================================== DOCUMENT STARTS HERE
 \begin{document}
 %----------------------------------------------- frontmatter starts here
@@ -1913,22 +1769,18 @@ $include-before$
 $endfor$
 
 $if(toc)$
-$if(beamer)$
-\begin{frame}
-\tableofcontents[hideallsubsections]
-\end{frame}
-$else$
-{
-$if(colorlinks)$
-\hypersetup{%
-  $if(toccolor)$linkcolor={$toccolor$},$else$$endif$%
-  $if(tocbordercolor)$linkbordercolor={$toccolor$},$else$$endif$%
-}
-$endif$
+  $if(toc-title)$
+    \renewcommand*\contentsname{$toc-title$}
+  $endif$
+{%
+  $if(colorlinks)$
+    \hypersetup{$if(toccolor)$linkcolor={$toccolor$},$else$$endif$%
+    $if(tocbordercolor)$linkbordercolor={$toccolor$},$else$$endif$%
+    }%
+  $endif$
 \setcounter{tocdepth}{$toc-depth$}
 \tableofcontents
 }
-$endif$
 $endif$
 $if(lot)$
 \listoftables
@@ -1974,25 +1826,11 @@ $if(natbib)$
       \renewcommand\refname{$biblio-title$}
       $endif$
     $endif$
-    $--$ $if(beamer)$
-    $--$   \begin{frame}[allowframebreaks]{$biblio-title$}
-    $--$     \bibliographytrue
-    $--$ $endif$
     \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
-    $--$  $if(beamer)$
-    $--$    \end{frame}
-    $--$  $endif$
   $endif$
 $endif$
 $if(biblatex)$
-  $--$ $if(beamer)$
-  $--$ \begin{frame}[allowframebreaks]{$biblio-title$}
-  $--$   \bibliographytrue
-  $--$   \printbibliography[heading=none]
-  $--$ \end{frame}
-  $--$ $else$
   \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-  $--$ $endif$
 $endif$
 
 $for(include-after)$
