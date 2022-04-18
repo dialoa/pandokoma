@@ -3,9 +3,15 @@
 v0.9. Copyright: © 2022 Julien Dutant <julien.dutant@kcl.ac.uk>
 License:  MIT - see LICENSE file for details.
 
-Pandokoma is a versatile KOMA-script template for Pandoc. It provides
-control for a large subset of the KOMA-script classes features directly
-from a source document's metadata, such as:
+Pandokoma is a versatile KOMA-script template for Pandoc. 
+
+It extends Pandoc's default LaTeX template, v2.18. 
+
+## Introduction
+
+Pandokoma provides control for a large subset of the KOMA-script
+classes features directly from a source document's metadata, such
+as:
 
 - setting and defining KOMA font styles
 - typesetting division headings 
@@ -64,7 +70,7 @@ as PDF generator. Use the `--pdf-engine` option, e.g:
 pandoc -s source.md -o destination.pdf --template pandokoma.latex --pdf-engine lualatex --metadata-file mystylefile.yaml
 ```
 
-__Repositorty overview__. This repository contains:
+__Repository overview__. This repository contains:
 
 1. [pandokoma.latex](pandokoma.latex) the main template.
 2. [pandokoma-bare.latex](pandokoma-bare.latex) a lighter alternative
