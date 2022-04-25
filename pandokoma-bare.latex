@@ -1270,6 +1270,16 @@ $if(aliaskomafonts)$
     $endif$
   $endfor$
 $endif$
+% ---------------------------------------------- Unicode chars from math
+% ----------------------------- provide unicode chars from math commands
+$if(unicodefrommath)$
+\usepackage{newunicodechar}
+$for(unicodefrommath)$
+  $if(it.char)$
+    $if(it.is)$\newunicodechar{$it.char$}{\ensuremath{$it.is$}}$endif$
+  $endif$
+$endfor$
+$endif$
 
 %------------------ upquote for straight quotes in verbatim environments
 %------------------------------------------------------ use if available

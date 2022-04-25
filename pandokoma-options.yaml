@@ -409,6 +409,20 @@ setkomafonts:
 - element: disposition
   defaults: \normalfont\bfseries
 
+# Unicode from math. Provide unicode characters in the main
+# font using those available in the math font.
+# Don't forget to use quotes if `char` is an HTML entity.
+# Example:
+# unicodefrommath:
+# - char: ∴
+#   is: \therefore
+# - char: '&rarr;'
+#   is: \rightarrow
+# This loads the package `newunicodechar` and issues 
+# commands like:
+# \newunicodechar{∴}{\ensuremath{\therefore}}
+unicodefrommath:
+
 # options to pass to the microtype package
 # the microtype package is loaded automatically if available
 # default: 'final'

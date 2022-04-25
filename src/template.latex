@@ -1,5 +1,9 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
+$--$ v0.9.1 Copyright: © 2022 Julien Dutant
+$--$ License: MIT.
+$--$ See <https://github.com/jdutant/pandokoma> for details and license.
+$--$
 $--$ Use $--$ to comment lines out; the second dollar sign is unnecessary
 $--$ but it keeps automatic LaTeX syntax highlighting in order.
 $--$ Beamer handling commented out but left here in case you want it.
@@ -1269,6 +1273,16 @@ $if(aliaskomafonts)$
       $endfor$
     $endif$
   $endfor$
+$endif$
+% ---------------------------------------------- Unicode chars from math
+% ----------------------------- provide unicode chars from math commands
+$if(unicodefrommath)$
+\usepackage{newunicodechar}
+$for(unicodefrommath)$
+  $if(it.char)$
+    $if(it.is)$\newunicodechar{$it.char$}{\ensuremath{$it.is$}}$endif$
+  $endif$
+$endfor$
 $endif$
 
 %------------------ upquote for straight quotes in verbatim environments
