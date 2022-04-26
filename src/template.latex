@@ -1,6 +1,6 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.1 Copyright: © 2022 Julien Dutant
+$--$ v0.9.2 Copyright: © 2022 Julien Dutant
 $--$ License: MIT.
 $--$ See <https://github.com/jdutant/pandokoma> for details and license.
 $--$
@@ -1095,11 +1095,29 @@ $elseif(proofmode)$
   \usepackage[fontsize=0.25\textwidth,text=PROOF]{draftwatermark}
 $endif$
 $if(linenumbers)$
-  \usepackage{lineno}
+  $if(linenumbersoptions)$
+    \usepackage[$for(linenumbersoptions)$$it$$sep$,$endfor$]{lineno}
+  $elseif(linenooptions)$
+    \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
+  $else$
+    \usepackage{lineno}
+  $end$
 $elseif(lineno)$
-  \usepackage{lineno}
+  $if(linenooptions)$
+    \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
+  $elseif(linenumbersoptions)$
+    \usepackage[$for(linenumbersoptions)$$it$$sep$,$endfor$]{lineno}
+  $else$
+    \usepackage{lineno}
+  $end$
 $elseif(proofmode)$
-  \usepackage{lineno}
+  $if(linenumbersoptions)$
+    \usepackage[$for(linenumbersoptions)$$it$$sep$,$endfor$]{lineno}
+  $elseif(linenooptions)$
+    \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
+  $else$
+    \usepackage{lineno}
+  $end$
 $endif$
 
 %-------------------to include the creative commons icons in my document

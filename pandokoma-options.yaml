@@ -697,7 +697,7 @@ showframe:
 
 # proofmode: set to true to print a "PROOF" watermark
 # and line numbers. Shorthand for the `draftwatermark`
-# and `linenumbers` options below.
+# and `linenumbers` field below.
 proofmode:
 
 # drafwatermark: set to yes to add a watermark
@@ -713,7 +713,8 @@ draftwatermark:
 draftwatermarkoptions:
 
 # linenumbers: line numbering with the lineno package
-# alias `lineno`
+# linenumbersoptions: options for the lineno package
+# aliases: 'lineno', 'linenooptions'
 linenumbers: 
 
 # to include the creative commons icons in my document
