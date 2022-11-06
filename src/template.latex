@@ -1101,7 +1101,7 @@ $if(linenumbers)$
     \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
   $else$
     \usepackage{lineno}
-  $end$
+  $endif$
 $elseif(lineno)$
   $if(linenooptions)$
     \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
@@ -1109,7 +1109,7 @@ $elseif(lineno)$
     \usepackage[$for(linenumbersoptions)$$it$$sep$,$endfor$]{lineno}
   $else$
     \usepackage{lineno}
-  $end$
+  $endif$
 $elseif(proofmode)$
   $if(linenumbersoptions)$
     \usepackage[$for(linenumbersoptions)$$it$$sep$,$endfor$]{lineno}
@@ -1117,7 +1117,7 @@ $elseif(proofmode)$
     \usepackage[$for(linenooptions)$$it$$sep$,$endfor$]{lineno}
   $else$
     \usepackage{lineno}
-  $end$
+  $endif$
 $endif$
 
 %-------------------to include the creative commons icons in my document
