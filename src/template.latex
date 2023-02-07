@@ -1466,7 +1466,8 @@ $endif$
 %---------------- Pandoc automatically sets the `strikeout` metavariable
 %----------------------------------------------- also used for underline
 $if(strikeout)$
-  \usepackage[normalem]{ulem}
+$-- also used for underline
+\usepackage{soul}
 $endif$
 
 %------------------------------------------------ prevent overfull lines
