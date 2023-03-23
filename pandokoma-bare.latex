@@ -1,11 +1,11 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.2 Copyright: © 2022 Julien Dutant
+$--$ v0.9.3 Copyright: © 2022 Julien Dutant
 $--$ License: MIT.
 $--$ See <https://github.com/jdutant/pandokoma> for details and license.
 $--$
 $--$ Use $--$ to comment lines out; the second dollar sign is unnecessary
-$--$ but it keeps automatic LaTeX syntax highlighting in order.
+$--$ but improves automatic LaTeX syntax highlighting.
 $--$ Beamer handling commented out but left here in case you want it.
 $--$
 %--------------------------------- Options for packages loaded elsewhere
@@ -1741,6 +1741,42 @@ $endif$
 $if(keywords)$
   pdfkeywords={$for(keywords)$$it$$sep$, $endfor$},
 $endif$
+$if(pdfcreator)$
+  pdfcreator={$pdfcreator$},
+$else$
+  pdfcreator={LaTeX and Pandoc},
+$endif$
+$if(bookmarks)$
+  $if(bookmarks.suppress)$
+  bookmarks=false,
+  $endif$
+  $if(bookmarks.depth)$
+  bookmarksdepth={$bookmarks.depth$},
+  $endif$
+  $if(bookmarks.open)$
+  bookmarksopen={true},
+  $endif$
+  $if(bookmarks.openlevel)$
+  bookmarksopenlevel={$bookmarks.openlevel$},
+  $else$
+    $if(bookmarks.open-level)$
+  bookmarksopenlevel={$bookmarks.open-level$},
+  $endif$
+  $endif$
+  $if(bookmarks.numbered)$
+  bookmarksnumbered=true,
+  $endif$
+  $if(bookmarks.type)$
+  bookmarkstype={$bookmarks.type$},
+  $endif$
+  $if(bookmarks.cjk)$
+  CJKbookmarks={true},
+  $else$
+    $if(bookmarks.CJK)$
+  CJKbookmarks={true},
+    $endif$
+  $endif$
+$endif$
 $if(linksborderstyle)$
   pdfborderstyle={$linksborderstyle$},
 $endif$
@@ -1764,11 +1800,6 @@ $else$
   $else$
     hidelinks,
   $endif$
-$endif$
-$if(pdfcreator)$
-  pdfcreator={$pdfcreator$},
-$else$
-  pdfcreator={LaTeX and Pandoc},
 $endif$
 breaklinks=true}
 %------------------------------------- verbatim in footnotes (see above)
