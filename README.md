@@ -1,11 +1,12 @@
 # Pandokoma - versatile KOMA-script template for Pandoc
 
-v0.9.2 Copyright: © 2022 Julien Dutant <julien.dutant@kcl.ac.uk>
-License:  MIT - see LICENSE file for details.
+Pandokoma is a powerful and versatile KOMA-script template for Pandoc. 
 
-Pandokoma is a versatile KOMA-script template for Pandoc. 
+Version 0.9.3. Compatible with Pandoc 3.19. 
 
-It extends Pandoc's default LaTeX template, v2.18. 
+Copyright 2022-23 Philosophie.ch. License:  MIT - see LICENSE file for details.
+
+Written by Julien Dutant <https://github.com/jdutant>
 
 ## Introduction
 
