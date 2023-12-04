@@ -1,12 +1,15 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.3 Copyright: © 2022 Julien Dutant
-$--$ License: MIT.
-$--$ See <https://github.com/jdutant/pandokoma> for details and license.
+$--$ v0.9.2 Copyright: © 2022-2023 Philosophie.ch
+$--$ License: MIT. See LICENSE file for detail
+$--$
+$--$ Compatible with Pandoc v 3.1.9
+$--$
+$--$ Written by Julien Dutant <https://github.com/jdutant/>
 $--$
 $--$ Use $--$ to comment lines out; the second dollar sign is unnecessary
-$--$ but improves automatic LaTeX syntax highlighting.
-$--$ Beamer handling commented out but left here in case you want it.
+$--$ but often improves LaTeX syntax highlighting.
+$--$ Beamer code removed: this template isn't compatible with beamer.
 $--$
 %--------------------------------- Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
@@ -24,20 +27,18 @@ $elseif(definecolors)$
   $for(xcoloroptions)$$it$$sep$,$endfor$%
   $else$dvipsnames,svgnames,x11names$endif$}{xcolor}
 $endif$
-$if(dir)$
-$if(latex-dir-rtl)$
-  \PassOptionsToPackage{RTLdocument}{bidi}
-$endif$
-$endif$
 $if(CJKmainfont)$
   \PassOptionsToPackage{space}{xeCJK}
 $endif$
 %-------------------------------------------------------- Document class
-\documentclass[%
-    $if(fontsize)$$fontsize$,$endif$%
-    $if(lang)$$babel-lang$,$endif$%
-    $if(papersize)$$papersize$paper,$endif$%
-    $for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+\documentclass[
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
 $if(komaoptions)$
   $for(komaoptions)$
     $if(it.option)$$if(it.value)$
@@ -53,6 +54,7 @@ $if(komaoption)$
   $endfor$
 $endif$
 %-----------------------------------------------------------------BUGFIX
+%  note for v1: is this still needed? the command is commented out.
 $if(longtablefix)$
 \makeatletter
 \newif\ifonecol
@@ -1157,23 +1159,35 @@ $endif$
 \else % if luatex or xetex
 $if(mathspec)$
   \ifXeTeX
-    \usepackage{mathspec}
+    \usepackage{mathspec} % this also loads fontspec
   \else
-    \usepackage{unicode-math}
+    \usepackage{unicode-math} % this also loads fontspec
   \fi
 $else$
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
 $endif$
-  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures{Scale=MatchLowercase}$-- must come before Beamer theme
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+$if(fontfamily)$
+$else$
+$-- Set default font before Beamer theme so the theme can override it
+\usepackage{lmodern}
+$endif$
+$-- User font settings (must come after default font and Beamer theme)
+$if(fontfamily)$
+\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+$endif$
+\ifPDFTeX\else
+  % xetex/luatex font selection
 $if(mainfont)$
-  \setmainfont[$for(mainfontoptions)$$it$$sep$,$endfor$]{$mainfont$}
+  \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
 $endif$
 $if(sansfont)$
-  \setsansfont[$for(sansfontoptions)$$it$$sep$,$endfor$]{$sansfont$}
+  \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
 $endif$
 $if(monofont)$
-  \setmonofont[$for(monofontoptions)$$it$$sep$,$endfor$]{$monofont$}
+  \setmonofont[$for(monofontoptions)$$monofontoptions$$sep$,$endfor$]{$monofont$}
 $endif$
 $for(fontfamilies)$
   \newfontfamily{$fontfamilies.name$}[$for(fontfamilies.options)$$fontfamilies.options$$sep$,$endfor$]{$fontfamilies.font$}
@@ -1193,6 +1207,12 @@ $if(CJKmainfont)$
   \ifXeTeX
     \usepackage{xeCJK}
     \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
+    $if(CJKsansfont)$
+      \setCJKsansfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKsansfont$}
+    $endif$
+    $if(CJKmonofont)$
+      \setCJKmonofont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmonofont$}
+    $endif$
   \fi
 $endif$
 $if(luatexjapresetoptions)$
@@ -1214,7 +1234,7 @@ $if(zero-width-non-joiner)$
 \def\zerowidthnonjoiner{%
   % Prevent ligatures and adjust kerning, but still support hyphenating.
   \texorpdfstring{%
-    \textormath{\nobreak\discretionary{-}{}{\kern.03em}%
+    \TextOrMath{\nobreak\discretionary{-}{}{\kern.03em}%
       \ifvmode\else\nobreak\hskip\z@skip\fi}{}%
   }{}%
 }
@@ -1309,12 +1329,12 @@ $endif$
 
 %------------------------------------------------ microtype if available
 %----------- for subliminal refinements towards typographical perfection
-\IfFileExists{microtype.sty}{%
-  $if(microtypeoptions)$%
+\IfFileExists{microtype.sty}{
+  $if(microtypeoptions)$
     \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
-  $else$%
+  $else$
     \usepackage[final]{microtype}
-  $endif$%
+  $endif$
   \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
 
@@ -1456,6 +1476,10 @@ $if(graphics)$
   \def\fps@figure{htbp}
   \makeatother
 $endif$
+$if(svg)$
+\usepackage{svg}
+$endif$
+
 %------------------------ links-as-notes to turn hotlinks into footnotes
 %------------------------------------------ `links-as-notes` set by user
 $if(links-as-notes)$
@@ -1467,7 +1491,19 @@ $endif$
 %----------------------------------------------- also used for underline
 $if(strikeout)$
 $-- also used for underline
-\usepackage{soul}
+\ifLuaTeX
+  \usepackage{luacolor}
+  \usepackage[soul]{lua-ul}
+\else
+  \usepackage{soul}
+$if(CJKmainfont)$
+  \ifXeTeX
+    % soul's \st doesn't work for CJK:
+    \usepackage{xeCJKfntef}
+    \renewcommand{\st}[1]{\sout{#1}}
+  \fi
+$endif$
+\fi
 $endif$
 
 %------------------------------------------------ prevent overfull lines
@@ -1475,11 +1511,15 @@ $endif$
 %--------------------------------------------------- provide tight lists
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+%--------------------------------------------------- provide subcaptions
+$if(subfigure)$
+\usepackage{subcaption}
+$endif$
 %------------------------------------------------------ Section headings
 $if(numbersections)$
   \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
 $else$
-  \setcounter{secnumdepth}{-\maxdimen} % remove sec numbering
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 $endif$
 $if(block-headings)$
   % Make \paragraph and \subparagraph free-standing
@@ -1502,28 +1542,38 @@ $endif$
 %------------------------------------------------- Citeproc bibliography
 %---------------------------------- styling commands with default values
 $if(csl-refs)$
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
 \newlength{\cslhangindent}
 \setlength{\cslhangindent}{1.5em}
 \newlength{\csllabelwidth}
 \setlength{\csllabelwidth}{3em}
-\newlength{\cslentryspacingunit} % times entry-spacing
-\setlength{\cslentryspacingunit}{\parskip}
-\newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
- {% don't indent paragraphs
-  \setlength{\parindent}{0pt}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
   % turn on hanging indent if param 1 is 1
   \ifodd #1
-  \let\oldpar\par
-  \def\par{\hangindent=\cslhangindent\oldpar}
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
   \fi
   % set entry spacing
-  \setlength{\parskip}{#2\cslentryspacingunit}
- }%
- {}
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
 \usepackage{calc}
-\newcommand{\CSLBlock}[1]{#1\hfill\break}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
 \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
 
@@ -1647,16 +1697,25 @@ $endif$
 %--------------------------------------------   (BEFORE HEADER-INCLUDES)
 %--------------------------------------------------- uses babel and bidi
 $if(lang)$
-\ifLuaTeX
-\usepackage[bidi=basic]{babel}
-\else
-\usepackage[bidi=default]{babel}
-\fi
+  \ifLuaTeX
+  \usepackage[bidi=basic]{babel}
+  \else
+  \usepackage[bidi=default]{babel}
+  \fi
   $if(babel-lang)$
   \babelprovide[main,import]{$babel-lang$}
+    $if(mainfont)$
+    \ifPDFTeX
+    \else
+    \babelfont{rm}[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
+    \fi
+    $endif$
   $endif$
   $for(babel-otherlangs)$
   \babelprovide[import]{$babel-otherlangs$}
+  $endfor$
+  $for(babelfonts/pairs)$
+  \babelfont[$babelfonts.key$]{rm}{$babelfonts.value$}
   $endfor$
   % get rid of language-specific shorthands (see #6817):
   \let\LanguageShortHands\languageshorthands
@@ -1690,25 +1749,25 @@ $endif$
 %========================================================== BIBLIOGRAPHY
 %--------------------------------------load natbib or biblatex if needed
 $if(natbib)$
-  \usepackage[$natbiboptions$]{natbib}
-  \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
+\usepackage[$natbiboptions$]{natbib}
+\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
 $if(biblatex)$
-  \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$%
-  $for(biblatexoptions)$$it$$sep$,$endfor$]{biblatex}
-  $for(bibliography)$
-    \addbibresource{$it$}
-  $endfor$
+\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
+$for(bibliography)$
+\addbibresource{$bibliography$}
+$endfor$
 $endif$
 
 $if(nocite-ids)$
-  \nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
-$endif$
-$if(csquotes)$
-  \usepackage{csquotes}
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
 $endif$
 
 %======================================================== EXTRA SETTINGS
+%------------------------------------------------------ provide csquotes
+$if(csquotes)$
+\usepackage{csquotes}
+$endif$
 %-----------------------------to make TeX less fussy about line breaking
 $if(sloppy)$
   \sloppy
@@ -1740,6 +1799,12 @@ $if(title-meta)$
 $endif$
 $if(author-meta)$
   pdfauthor={$author-meta$},
+$endif$
+$if(lang)$
+  pdflang={$lang$},
+$endif$
+$if(subject)$
+  pdfsubject={$subject$},
 $endif$
 $if(keywords)$
   pdfkeywords={$for(keywords)$$it$$sep$, $endfor$},
