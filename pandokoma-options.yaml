@@ -409,15 +409,30 @@ setkomafonts:
 - element: disposition
   defaults: \normalfont\bfseries
 
+# Declare Unicode Char. Provide Unicode chars by code.
+# Example:
+# declareunicodechar:
+# - char: '"1F40'
+#   command: \char"03BF\char"0343
+declareunicodechar:
+
+# New Unicode Char. Provide Unicode chars by char.
+# Example:
+# newunicodechar:
+# - char: ὀ
+#   command: 'ο\char"0343'
+newunicodechar:
+
+
 # Unicode from math. Provide unicode characters in the main
 # font using those available in the math font.
 # Don't forget to use quotes if `char` is an HTML entity.
 # Example:
 # unicodefrommath:
 # - char: ∴
-#   is: \therefore
+#   command: \therefore
 # - char: '&rarr;'
-#   is: \rightarrow
+#   command: \rightarrow
 # This loads the package `newunicodechar` and issues 
 # commands like:
 # \newunicodechar{∴}{\ensuremath{\therefore}}

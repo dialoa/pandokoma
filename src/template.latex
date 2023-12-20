@@ -1656,13 +1656,33 @@ $if(aliaskomafonts)$
     $endif$
   $endfor$
 $endif$
-% ---------------------------------------------- Unicode chars from math
+% ------------------------------------------------ Missing Unicode chars
+% ---------------------------------------- declare unicode chars by code
+% ---------------------------------------- provide unicode chars by char
 % ----------------------------- provide unicode chars from math commands
 $if(unicodefrommath)$
 \usepackage{newunicodechar}
+$elseif(newunicodechar)$
+\usepackage{newunicodechar}
+$endif$
+$if(declareunicodechar)$
+$for(declareunicodechar)$
+  $if(it.code)$
+    $if(it.command)$\DeclareUnicodeCharacter{$it.code$}{$it.command$}$endif$
+  $endif$
+$endfor$
+$endif$
+$if(newunicodechar)$
+$for(newunicodechar)$
+  $if(it.char)$
+    $if(it.command)$\newunicodechar{$it.char$}{$it.command$}$endif$
+  $endif$
+$endfor$
+$endif$
+$if(unicodefrommath)$
 $for(unicodefrommath)$
   $if(it.char)$
-    $if(it.is)$\newunicodechar{$it.char$}{\ensuremath{$it.is$}}$endif$
+    $if(it.command)$\newunicodechar{$it.char$}{\ensuremath{$it.command$}}$endif$
   $endif$
 $endfor$
 $endif$
