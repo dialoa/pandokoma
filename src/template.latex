@@ -1660,9 +1660,9 @@ $endif$
 % ---------------------------------------- declare unicode chars by code
 % ---------------------------------------- provide unicode chars by char
 % ----------------------------- provide unicode chars from math commands
-$if(unicodefrommath)$
+$if(newunicodechar)$
 \usepackage{newunicodechar}
-$elseif(newunicodechar)$
+$elseif(unicodefrommath)$
 \usepackage{newunicodechar}
 $endif$
 $if(declareunicodechar)$

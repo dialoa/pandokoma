@@ -1660,20 +1660,20 @@ $endif$
 % ---------------------------------------- declare unicode chars by code
 % ---------------------------------------- provide unicode chars by char
 % ----------------------------- provide unicode chars from math commands
-$if(unicodefrommath)$
+$if(newunicodechar)$
 \usepackage{newunicodechar}
-$elseif(newunicodechar)$
+$elseif(unicodefrommath)$
 \usepackage{newunicodechar}
 $endif$
 $if(declareunicodechar)$
-$for(unicodefrommath)$
+$for(declareunicodechar)$
   $if(it.code)$
     $if(it.command)$\DeclareUnicodeCharacter{$it.code$}{$it.command$}$endif$
   $endif$
 $endfor$
 $endif$
 $if(newunicodechar)$
-$for(unicodefrommath)$
+$for(newunicodechar)$
   $if(it.char)$
     $if(it.command)$\newunicodechar{$it.char$}{$it.command$}$endif$
   $endif$
