@@ -412,15 +412,20 @@ setkomafonts:
 # Declare Unicode Char. Provide Unicode chars by code.
 # Example:
 # declareunicodechar:
-# - char: '"1F40'
-#   command: \char"03BF\char"0343
+# - char: '8000'
+#   command: \symbol{"03BF}\symbol{"0343}
+# Warning: entering LaTeX hexadecimal numbers `"1F40" is risky,
+# as Pandoc converts the quotation marks. Use decimal Numbers for
+# the code, and use `\symbol{"03BF}` instead of `\char"03BF`.
 declareunicodechar:
 
 # New Unicode Char. Provide Unicode chars by char.
 # Example:
 # newunicodechar:
 # - char: ὀ
-#   command: 'ο\char"0343'
+#   command: \symbol{"03BF}\symbol{"0343}
+# Warning: don't use `\char"03BF` as Pandoc converts the quotation
+# marks. Use `\symbol{"03BF}` instead.
 newunicodechar:
 
 
