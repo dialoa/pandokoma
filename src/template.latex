@@ -1,6 +1,6 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.4 Copyright: © 2022-2023 Philosophie.ch
+$--$ v0.9.4 Copyright: © 2022-2024 Philosophie.ch
 $--$ License: MIT. See LICENSE file for detail
 $--$
 $--$ Compatible with Pandoc v 3.5
@@ -9,7 +9,6 @@ $--$ Written by Julien Dutant <https://github.com/jdutant/>
 $--$
 $--$ Use $--$ to comment lines out; the second dollar sign is unnecessary
 $--$ but often improves LaTeX syntax highlighting.
-$--$ Beamer code removed: this template isn't compatible with beamer.
 $--$
 %--------------------------------- Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
@@ -1886,6 +1885,11 @@ $if(nomaketitle)$
   $if(rawtitlecode)$$rawtitlecode$$endif$
 $else$
   \maketitle$if(maketitle-page)$[$maketitle-page$]$endif$
+  $if(abstract)$
+    \begin{abstract}
+    $abstract$
+    \end{abstract}
+  $endif$
 $endif$
 
 $for(include-before)$
@@ -1906,12 +1910,16 @@ $if(toc)$
 \tableofcontents
 }
 $endif$
-$if(lot)$
-\listoftables
-$endif$
 $if(lof)$
 \listoffigures
 $endif$
+$if(lot)$
+\listoftables
+$endif$
+$if(linestretch)$
+\setstretch{$linestretch$}
+$endif$
+
 
 %------------------------------------------------ mainmatter starts here
 %---------------------------- if the user provides their own \mainmatter
