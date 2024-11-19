@@ -1,9 +1,9 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.3 Copyright: © 2022-2023 Philosophie.ch
+$--$ v0.9.4 Copyright: © 2022-2023 Philosophie.ch
 $--$ License: MIT. See LICENSE file for detail
 $--$
-$--$ Compatible with Pandoc v 3.1.9
+$--$ Compatible with Pandoc v 3.5
 $--$
 $--$ Written by Julien Dutant <https://github.com/jdutant/>
 $--$
@@ -29,8 +29,7 @@ $elseif(definecolors)$
 $endif$
 $if(CJKmainfont)$
   \PassOptionsToPackage{space}{xeCJK}
-$endif$
-%-------------------------------------------------------- Document class
+$endif$%-------------------------------------------------------- Document class
 \documentclass[
 $if(fontsize)$
   $fontsize$,
@@ -39,6 +38,9 @@ $if(papersize)$
   $papersize$paper,
 $endif$
 $for(classoption)$$classoption$$sep$,$endfor$]{$documentclass$}
+$if(beamerarticle)$
+\usepackage{beamerarticle} % needs to be loaded first
+$endif$
 $if(komaoptions)$
   $for(komaoptions)$
     $if(it.option)$$if(it.value)$
@@ -53,16 +55,6 @@ $if(komaoption)$
     $endif$$endif$
   $endfor$
 $endif$
-%-----------------------------------------------------------------BUGFIX
-%  note for v1: is this still needed? the command is commented out.
-$if(longtablefix)$
-\makeatletter
-\newif\ifonecol
-\@ifclasswith{scrbook}{onecolumn}{\onecoltrue}{\onecolfalse}
-%\newcommand{\switchcol}{\ifonecol ONE\else TWO\fi}
-\makeatother
-$endif$
-%---------------------------------------------------------------GEOMETRY
 %------------------------------------------ uses raggedbottom by default
 $if(raggedbottom)$\raggedbottom
 $elseif(flushbottom)$\flushbottom
@@ -1483,113 +1475,12 @@ $endif$
 %---------------------------------- commmon math symbols and typesetting
 %-------------------------------------------------------- (AMS packages)
 \usepackage{amsmath,amssymb}
-%-------------base fonts (used if no XeLaTeX / LuaLaTeX font provided)
-$if(fontfamily)$
-  \usepackage[$for(fontfamilyoptions)$$it$$sep$,$endfor$]{$fontfamily$}
-$else$
-  \usepackage{lmodern}
-$endif$
-%------------------------------------------------- optional line stretch
-$if(linestretch)$
-  \usepackage{setspace}
-$endif$
+%------------------------------------------------ default font (lmodern)
 %----------------------------------------- fontspec, XeTeX, LuaTeX setup
-%--------------------------`unicode-math` and `mathspec` load `fontspec`
-\usepackage{iftex}
-\ifPDFTeX
-  \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-$if(mathspec)$
-  \ifXeTeX
-    \usepackage{mathspec} % this also loads fontspec
-  \else
-    \usepackage{unicode-math} % this also loads fontspec
-  \fi
-$else$
-  \usepackage{unicode-math} % this also loads fontspec
-$endif$
-  \defaultfontfeatures{Scale=MatchLowercase}$-- must come before Beamer theme
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-$if(fontfamily)$
-$else$
-$-- Set default font before Beamer theme so the theme can override it
-\usepackage{lmodern}
-$endif$
-$-- User font settings (must come after default font and Beamer theme)
-$if(fontfamily)$
-\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
-$endif$
-\ifPDFTeX\else
-  % xetex/luatex font selection
-$if(mainfont)$
-  \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
-$endif$
-$if(sansfont)$
-  \setsansfont[$for(sansfontoptions)$$sansfontoptions$$sep$,$endfor$]{$sansfont$}
-$endif$
-$if(monofont)$
-  \setmonofont[$for(monofontoptions)$$monofontoptions$$sep$,$endfor$]{$monofont$}
-$endif$
-$for(fontfamilies)$
-  \newfontfamily{$fontfamilies.name$}[$for(fontfamilies.options)$$fontfamilies.options$$sep$,$endfor$]{$fontfamilies.font$}
-$endfor$
-$if(mathfont)$
-$if(mathspec)$
-  \ifXeTeX
-    \setmathfont(Digits,Latin,Greek)[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
-  \else
-    \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
-  \fi
-$else$
-  \setmathfont[$for(mathfontoptions)$$mathfontoptions$$sep$,$endfor$]{$mathfont$}
-$endif$
-$endif$
-$if(CJKmainfont)$
-  \ifXeTeX
-    \usepackage{xeCJK}
-    \setCJKmainfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
-    $if(CJKsansfont)$
-      \setCJKsansfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKsansfont$}
-    $endif$
-    $if(CJKmonofont)$
-      \setCJKmonofont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmonofont$}
-    $endif$
-  \fi
-$endif$
-$if(luatexjapresetoptions)$
-  \ifLuaTeX
-    \usepackage[$for(luatexjapresetoptions)$$luatexjapresetoptions$$sep$,$endfor$]{luatexja-preset}
-  \fi
-$endif$
-$if(CJKmainfont)$
-  \ifLuaTeX
-    \usepackage[$for(luatexjafontspecoptions)$$luatexjafontspecoptions$$sep$,$endfor$]{luatexja-fontspec}
-    \setmainjfont[$for(CJKoptions)$$CJKoptions$$sep$,$endfor$]{$CJKmainfont$}
-  \fi
-$endif$
-\fi
-
-% --------------------------Support for zero-width non-joiner characters
-$if(zero-width-non-joiner)$
-\makeatletter
-\def\zerowidthnonjoiner{%
-  % Prevent ligatures and adjust kerning, but still support hyphenating.
-  \texorpdfstring{%
-    \TextOrMath{\nobreak\discretionary{-}{}{\kern.03em}%
-      \ifvmode\else\nobreak\hskip\z@skip\fi}{}%
-  }{}%
-}
-\makeatother
-\ifPDFTeX
-  \DeclareUnicodeCharacter{200C}{\zerowidthnonjoiner}
-\else
-  \catcode`^^^^200c=\active
-  \protected\def ^^^^200c{\zerowidthnonjoiner}
-\fi
-$endif$
+%----------------- includes support for zero-width non-joiner characters
+%------------------------------------- includes upquote.sty if available
+%---------- includes microtype.sty typographic enhancements if available
+$fonts.latex()$
 
 % --------------------------------------------------- KOMA font elements
 $if(newkomafonts)$
@@ -1687,51 +1578,36 @@ $for(unicodefrommath)$
 $endfor$
 $endif$
 
-%------------------ upquote for straight quotes in verbatim environments
-%------------------------------------------------------ use if available
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+%================================================= COMMON LATEX SETTINGS
+%---------------------------------------------------------- common.latex
+%----------------------------------- includes linestretch (setspace.sty)
+%------------ includes indent (parskip.sty or KOMA \parindent, \parskip)
+%------------------------------ includes verbatim-in-note (fancyvrb.sty)
+%-------------------------------------- includes listings (listings.sty)
+%---------------------------------------------- lhs (listings.sty setup)
+%------------------------------------------ includes highlighting-macros
+%----------------------------------------------- includes table support:
+%----------------------longtable core LaTeX package for multipage tables
+%-----------------------------booktabs for beautiful high quality tables
+%--------------------- array improves the tabular and array environments
+%--------------------- includes graphics support (graphicx.sty, svg.sty)
+%-------------------------------------- includes strikeout and underline
+%------------------------------------------------ includes CSL citations
+%-------------------------------------- lang: languge support with babel
+%-----includes selnolig: language-sensitive removal of illegal ligatures
+%----------------------------------------------------(requires LuaLaTeX)
+%-------------------includes pagestyle (overriden if scrheadings is set)
+%------------------ prevents overfull lines by setting \emergencystretch
+%----------------------- provides tightlists (provide command \tighlist)
+%--------------------------- includes subfigure support (subcaption.sty)
+%----------------------------------------- includes dir (text direction)
+%-------------------------------- inclues bib support (natbib, biblatex)
+%------------------------------------------------- includes csquotes.sty
+$common.latex()$
 
-%------------------------------------------------ microtype if available
-%----------- for subliminal refinements towards typographical perfection
-\IfFileExists{microtype.sty}{
-  $if(microtypeoptions)$
-    \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
-  $else$
-    \usepackage[final]{microtype}
-  $endif$
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
 
-%------------------------ paragraph separation: indent or vertical space
-$if(indent)$
-$else$
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-$endif$
-
-% ---------------------------------------- support for verbatim in notes
-% ---------------------- `verbatim-in-notes` automatically set by Pandoc
-% -------------------------------- needs a second command after hyperref
-$if(verbatim-in-note)$
-  \usepackage{fancyvrb}
-$endif$
 % -------------------------------------------------------- color support
-% ---------------------------- xcolor for driver-independent color names
-$if(colorlinks)$
-  \usepackage{xcolor}
-$elseif(xcolor)$
-  \usepackage{xcolor}
-$elseif(definecolors)$
-  \usepackage{xcolor}
-$endif$
+\usepackage{xcolor}
 % -------------------------------------------------------- define colors
 % ------------------------ requires name, model and spec. type optional.
 $if(definecolors)$
@@ -1743,142 +1619,6 @@ $if(definecolors)$
   $endfor$
 $endif$
 
-%================================== PANDOC AUTOMATIC TYPOGRAPHY SETTINGS
-%----------------listings to typeset source code (see pkg "listings-ex")
-$if(listings)$
-  \usepackage{listings}
-  \newcommand{\passthrough}[1]{#1}
-  \lstset{defaultdialect=[5.3]Lua}
-  \lstset{defaultdialect=[x86masm]Assembler}
-$endif$
-$if(lhs)$
-  \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
-$endif$
-$if(highlighting-macros)$
-$highlighting-macros$
-$endif$
-
-%---------------------------------------------------------------- Tables
-%----------------------longtable core LaTeX package for multipage tables
-%-----------------------------booktabs for beautiful high quality tables
-%----------------------array improves the tabular and array environments
-$if(tables)$
-  \usepackage{longtable,booktabs,array}
-  \usepackage{calc} % for calculating minipage widths
-  %-----------------------to create tabular cells spanning multiple rows
-  $if(multirow)$
-    \usepackage{multirow}
-  $endif$
-  % Correct order of tables after \paragraph or \subparagraph
-  \usepackage{etoolbox}
-  \makeatletter
-  \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-  \makeatother
-  % Allow footnotes in longtable head/foot
-  \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-  \makesavenoteenv{longtable}
-
-  %---------------------------------------------------- LONGTABLE BUGFIX
-  %------------redefine longtable because it doesn't work in multicolumn
-  %----------------------------------------------------solves the error:
-  %---------"! Package longtable Error: longtable not in 1-column mode."
-  %----------------------------occuring in twocolumn mode (class option)
-  %-----------------see issue: https://github.com/jgm/pandoc/issues/1023
-  %----------------------------source: Marco Torchian@tex.stackexchange:
-  %-------------------------https://tex.stackexchange.com/q/161431/43790
-  %------------------------------------------------------------start fix
-  $if(longtablefix)$
-    \makeatletter
-    \let\oldlt\longtable
-    \let\endoldlt\endlongtable
-    \def\longtable{\@ifnextchar[\longtable@i \longtable@ii}
-    \def\longtable@i[#1]{\begin{figure*}[t]
-    \onecolumn
-    \centering
-    \begin{minipage}{0.99\textwidth}
-    \oldlt[#1]
-    }
-    \def\longtable@ii{\begin{figure*}[t]
-    \onecolumn
-    \centering
-    \begin{minipage}{0.99\textwidth}
-    \oldlt
-    }
-    \def\endlongtable{\endoldlt
-    \end{minipage}
-    %--------to switch back to "\onecolumn"/"\twocolumn" if classoption is
-    %-----------------------------------------------"oncolumn"/"twocolumn"
-    \ifonecol
-    \onecolumn
-    \else
-    \twocolumn
-    \fi
-    \end{figure*}}
-    \makeatother
-  $endif$
-  %--------------------------------------------------------------end fix
-$endif$
-
-%-------------------------------------------------------------- Graphics
-%-------------------------------- graphicx to embed pictures in document
-%----------------------------\  fps@figure: default placement of figures
-%---------- Order has no impact: 'htbp' just means that LaTeX is allowed
-%---------------------to try here, at top, bottom or on a separate page. 
-%-------------------It will try h, t, b, p in that order no matter what. 
-$if(graphics)$
-  \usepackage{graphicx}
-  \makeatletter
-  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-  \makeatother
-  % Scale images if necessary, so that they will not overflow the page
-  % margins by default, and it is still possible to overwrite the defaults
-  % using explicit options in \includegraphics[width, height, ...]{}
-  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-  % Set default figure placement to htbp
-  \makeatletter
-  \def\fps@figure{htbp}
-  \makeatother
-$endif$
-$if(svg)$
-\usepackage{svg}
-$endif$
-
-%------------------------ links-as-notes to turn hotlinks into footnotes
-%------------------------------------------ `links-as-notes` set by user
-$if(links-as-notes)$
-  \DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
-$endif$
-
-%-------------------------------------------------------- strikeout text
-%---------------- Pandoc automatically sets the `strikeout` metavariable
-%----------------------------------------------- also used for underline
-$if(strikeout)$
-$-- also used for underline
-\ifLuaTeX
-  \usepackage{luacolor}
-  \usepackage[soul]{lua-ul}
-\else
-  \usepackage{soul}
-$if(CJKmainfont)$
-  \ifXeTeX
-    % soul's \st doesn't work for CJK:
-    \usepackage{xeCJKfntef}
-    \renewcommand{\st}[1]{\sout{#1}}
-  \fi
-$endif$
-\fi
-$endif$
-
-%------------------------------------------------ prevent overfull lines
-\setlength{\emergencystretch}{3em}  
-%--------------------------------------------------- provide tight lists
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-%--------------------------------------------------- provide subcaptions
-$if(subfigure)$
-\usepackage{subcaption}
-$endif$
 %------------------------------------------------------ Section headings
 $if(numbersections)$
   \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
@@ -1895,50 +1635,6 @@ $if(block-headings)$
     \let\oldsubparagraph\subparagraph
     \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
   \fi
-$endif$
-
-%------------------------------------------------------------ Page style
-%--------------------------------will be overriden if scrheadings is set
-$if(pagestyle)$
-\pagestyle{$pagestyle$}
-$endif$
-
-%------------------------------------------------- Citeproc bibliography
-%---------------------------------- styling commands with default values
-$if(csl-refs)$
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 $endif$
 
 %------------------------------------------------- GEOMETRY: set lengths
@@ -2016,6 +1712,12 @@ $else$
   $endif$
 %        ------------------------------------------------------ subtitle
   $if(subtitle)$
+    \usepackage{etoolbox}
+    \makeatletter
+    \providecommand{\subtitle}[1]{% add subtitle to \maketitle
+      \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+    }
+    \makeatother
     \subtitle{$subtitle$}
   $endif$
 %        -------------------------------------------------------- author
@@ -2057,81 +1759,13 @@ $else$
 
 $endif$
 
-%==================================================  LANGUAGES SUPPORT I
-%--------------------------------------------   (BEFORE HEADER-INCLUDES)
-%--------------------------------------------------- uses babel and bidi
-$if(lang)$
-  \ifLuaTeX
-  \usepackage[bidi=basic]{babel}
-  \else
-  \usepackage[bidi=default]{babel}
-  \fi
-  $if(babel-lang)$
-  \babelprovide[main,import]{$babel-lang$}
-    $if(mainfont)$
-    \ifPDFTeX
-    \else
-    \babelfont{rm}[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
-    \fi
-    $endif$
-  $endif$
-  $for(babel-otherlangs)$
-  \babelprovide[import]{$babel-otherlangs$}
-  $endfor$
-  $for(babelfonts/pairs)$
-  \babelfont[$babelfonts.key$]{rm}{$babelfonts.value$}
-  $endfor$
-  % get rid of language-specific shorthands (see #6817):
-  \let\LanguageShortHands\languageshorthands
-  \def\languageshorthands#1{}
-$endif$
 
 %================================================== USER HEADER-INCLUDES
 $for(header-includes)$
 $header-includes$
 $endfor$
 
-%================================================== LANGUAGES SUPPORT II
-%--------------------------------------------    (AFTER HEADER-INCLUDES)
-%-----------------------------------------------------------------------
-%------------------------language-sensitive removal of illegal ligatures
-%----------------------------------------------------(requires LuaLaTeX)
-\ifLuaTeX
-  \usepackage{selnolig}  % disable illegal ligatures
-\fi
-%------------------------------------------------left-to-right languages
-$if(dir)$
-\ifPDFTeX
-  \TeXXeTstate=1
-  \newcommand{\RL}[1]{\beginR #1\endR}
-  \newcommand{\LR}[1]{\beginL #1\endL}
-  \newenvironment{RTL}{\beginR}{\endR}
-  \newenvironment{LTR}{\beginL}{\endL}
-\fi
-$endif$
-
-%========================================================== BIBLIOGRAPHY
-%--------------------------------------load natbib or biblatex if needed
-$if(natbib)$
-\usepackage[$natbiboptions$]{natbib}
-\bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
-$endif$
-$if(biblatex)$
-\usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
-$for(bibliography)$
-\addbibresource{$bibliography$}
-$endfor$
-$endif$
-
-$if(nocite-ids)$
-\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
-$endif$
-
 %======================================================== EXTRA SETTINGS
-%------------------------------------------------------ provide csquotes
-$if(csquotes)$
-\usepackage{csquotes}
-$endif$
 %-----------------------------to make TeX less fussy about line breaking
 $if(sloppy)$
   \sloppy
@@ -2148,15 +1782,17 @@ $if(frenchspacing)$
 $endif$
 
 %================================================================= LINKS
-%---------------------------------------- hyperref must be loaded last
-%-------------------------------extensive support for hypertext in LaTeX
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-$if(urlstyle)$
-  \urlstyle{$urlstyle$}
-$else$
-  \urlstyle{same} % disable monospaced font for URLs
-$endif$
+%------------------------------------------ hyperref must be loaded last
+%------------------------------ extensive support for hypertext in LaTeX
+%-----------------------------------------------------------------------
+%----------------------------------------- after-header-includes.latex()
+%-------------------------------------- provides bookmarks.sty, xurl.sty
+%------------------------------------------ `links-as-notes` set by user
+%------------------------------------- verbatim in footnotes (see above)
+$after-header-includes.latex()$
+
+%-------------------------------------------------------- hyperref setup
+%---------------------- more customizable than Pandoc's hypersetup.latex
 \hypersetup{
 $if(title-meta)$
   pdftitle={$title-meta$},
@@ -2234,11 +1870,6 @@ $else$
   $endif$
 $endif$
 breaklinks=true}
-%------------------------------------- verbatim in footnotes (see above)
-%------------ looks like this needs to come after hyperref, not sure why
-$if(verbatim-in-note)$
-  \VerbatimFootnotes
-$endif$
 
 %================================================== DOCUMENT STARTS HERE
 \begin{document}
