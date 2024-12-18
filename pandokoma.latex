@@ -1,6 +1,6 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.4 Copyright: © 2022-2024 Philosophie.ch
+$--$ v0.9.5 Copyright: © 2022-2024 Philosophie.ch
 $--$ License: MIT. See LICENSE file for detail
 $--$
 $--$ Compatible with Pandoc v 3.5
@@ -1329,9 +1329,14 @@ $if(lplfitch)$
   \usepackage{lplfitch}
 $endif$
 
-%------------ for advanced math typesetting (loads all default math pkg)
+%========================================================= MATH PACKAGES
+%---math: loads all standard math packages for advanced math typesetting
+%-------------------mathtools: not all math packages, but load mathtools
 %---------------------- mathtools and amssymb loaded before unicode-math
 $if(math)$
+%-------------------------------improved and extended version of amsmath
+%-------------------------------------must be loaded before unicode-math
+  \usepackage{mathtools}
 %--------------------------typesetting of custom theorems (in ams style)
   \usepackage{amsthm}
 %----------------------------------------dirac bra-ket and set notations
@@ -1341,7 +1346,15 @@ $if(math)$
   \usepackage{cases}
 %-------------------for proof trees in the style of the sequent calculus
   \usepackage{bussproofs}
+$elseif(mathtools)$
+%-------------------------------improved and extended version of amsmath
+%-------------------------------------must be loaded before unicode-math
+  \usepackage{mathtools}
+$else$
+  \usepackage{amsmath}
 $endif$
+%---------------------mathematical fonts and symbols (includes amsfonts)
+  \usepackage{amssymb}
 
 %--------------------to create (tabular cells spanning) multiple columns 
 %-----------------------------------------------(load before pkg "bidi")
