@@ -1,9 +1,9 @@
 $--$ PANDOKOMA - powerful, versatile KOMA template for Pandoc
 $--$
-$--$ v0.9.5 Copyright: © 2022-2024 Philosophie.ch
+$--$ v0.9.6 Copyright: © 2022-2024 Philosophie.ch
 $--$ License: MIT. See LICENSE file for detail
 $--$
-$--$ Compatible with Pandoc v 3.5
+$--$ Compatible with Pandoc 3.6
 $--$
 $--$ Written by Julien Dutant <https://github.com/jdutant/>
 $--$
@@ -1497,6 +1497,7 @@ $endif$
 %------------------------------------- includes upquote.sty if available
 %---------- includes microtype.sty typographic enhancements if available
 $fonts.latex()$
+$fonts-settings.latex()$
 
 % --------------------------------------------------- KOMA font elements
 $if(newkomafonts)$

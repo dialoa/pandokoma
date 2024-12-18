@@ -2,7 +2,7 @@
 
 Pandokoma is a powerful and versatile KOMA-script template for Pandoc. 
 
-Version 0.9.5. Compatible with Pandoc 3.5. 
+Version 0.9.6. Compatible with Pandoc 3.6. 
 
 Copyright 2022-24 Philosophie.ch. License:  MIT - see LICENSE file for details.
 
