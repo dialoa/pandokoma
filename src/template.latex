@@ -1330,12 +1330,8 @@ $if(lplfitch)$
 $endif$
 
 %------------ for advanced math typesetting (loads all default math pkg)
-%---------------------------------- amsmath and amssymb loaded elsewhere
+%---------------------- mathtools and amssymb loaded before unicode-math
 $if(math)$
-%---------------------------------mathematical tools to use with amsmath
-  \usepackage{mathtools}
-%-----------------------TeX fonts from the american mathematical society
-  \usepackage{amsfonts}
 %--------------------------typesetting of custom theorems (in ams style)
   \usepackage{amsthm}
 %----------------------------------------dirac bra-ket and set notations
@@ -1471,9 +1467,17 @@ $endif$
 %----------------------------------------------Pandoc's default template
 
 %======================================================= FONT MANAGEMENT
-%---------------------------------- commmon math symbols and typesetting
-%-------------------------------------------------------- (AMS packages)
-\usepackage{amsmath,amssymb}
+%-----------------------------------commmon math symbols and typesetting
+%---------------------------------load improved versions if `math` is on
+$if(math)$
+%-------------------------------improved and extended version of amsmath
+%-------------------------------------must be loaded before unicode-math
+  \usepackage{mathtools}
+%---------------------mathematical fonts and symbols (includes amsfonts)
+  \usepackage{amssymb}
+$else$
+  \usepackage{amsmath,amssymb}
+$endif$
 %------------------------------------------------ default font (lmodern)
 %----------------------------------------- fontspec, XeTeX, LuaTeX setup
 %----------------- includes support for zero-width non-joiner characters
