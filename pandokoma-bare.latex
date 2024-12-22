@@ -1480,17 +1480,6 @@ $endif$
 %----------------------------------------------Pandoc's default template
 
 %======================================================= FONT MANAGEMENT
-%-----------------------------------commmon math symbols and typesetting
-%---------------------------------load improved versions if `math` is on
-$if(math)$
-%-------------------------------improved and extended version of amsmath
-%-------------------------------------must be loaded before unicode-math
-  \usepackage{mathtools}
-%---------------------mathematical fonts and symbols (includes amsfonts)
-  \usepackage{amssymb}
-$else$
-  \usepackage{amsmath,amssymb}
-$endif$
 %------------------------------------------------ default font (lmodern)
 %----------------------------------------- fontspec, XeTeX, LuaTeX setup
 %----------------- includes support for zero-width non-joiner characters
